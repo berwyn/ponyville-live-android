@@ -1,4 +1,4 @@
-package com.ponyvillelive.app;
+package com.ponyvillelive.app.ui;
 
 import android.app.Activity;
 
@@ -12,10 +12,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.Toast;
+
+import com.ponyvillelive.app.R;
+import com.ponyvillelive.app.model.Station;
 
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, StationFragment.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -45,9 +49,18 @@ public class MainActivity extends Activity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+        String mode;
+        switch(position) {
+            case 1:
+                mode = Station.STATION_TYPE_VIDEO;
+                break;
+            default:
+                mode = Station.STATION_TYPE_AUDIO;
+                break;
+        }
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .replace(R.id.container, StationFragment.newInstance(mode))
                 .commit();
     }
 
@@ -95,10 +108,12 @@ public class MainActivity extends Activity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(String id) {
+        Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
     }
 
     /**
