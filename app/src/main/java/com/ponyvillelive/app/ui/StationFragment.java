@@ -8,13 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-
 import com.ponyvillelive.app.R;
-import com.ponyvillelive.app.dummy.DummyContent;
+import com.ponyvillelive.app.model.Station;
 
 /**
  * A fragment representing a list of Items.
@@ -102,7 +100,7 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            mListener.onFragmentInteraction((Station) mAdapter.getItem(position));
         }
     }
 
@@ -131,7 +129,7 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+        public void onFragmentInteraction(Station station);
     }
 
 }

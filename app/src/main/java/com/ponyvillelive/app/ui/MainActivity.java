@@ -5,7 +5,12 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,11 +20,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.Toast;
 
 import com.ponyvillelive.app.R;
+import com.ponyvillelive.app.media.PlayRequestedEvent;
+import com.ponyvillelive.app.media.PlayerService;
 import com.ponyvillelive.app.model.Station;
+import com.squareup.otto.Bus;
 
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, StationFragment.OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        StationFragment.OnFragmentInteractionListener,
+        ServiceConnection {
+
+    private Bus eventBus;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -44,6 +56,21 @@ public class MainActivity extends Activity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+    }
+
+    @Override
+    protected void onResume() {
+        Intent intent = new Intent(this, PlayerService.class);
+        bindService(intent, this, Context.BIND_AUTO_CREATE);
+
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        unbindService(this);
+
+        super.onPause();
     }
 
     @Override
@@ -112,8 +139,19 @@ public class MainActivity extends Activity
     }
 
     @Override
-    public void onFragmentInteraction(String id) {
-        Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
+    public void onFragmentInteraction(Station station) {
+        eventBus.post(new PlayRequestedEvent(station.streamUrl));
+        PlayingTrackNotification.notify(getApplicationContext(), station.name, 42);
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        eventBus = ((PlayerService.PlayerServiceBinder) service).getEventBus();
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        eventBus = null;
     }
 
     /**
