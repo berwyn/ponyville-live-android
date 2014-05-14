@@ -1,7 +1,7 @@
 package com.ponyvillelive.app.model;
 
 /**
- * Created by tyr on 12/05/2014.
+ * Metadata associated with a station, as presented by the "Now Playing" endpoint
  */
 public class StationMeta {
 

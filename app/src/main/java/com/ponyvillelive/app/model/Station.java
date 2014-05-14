@@ -3,7 +3,7 @@ package com.ponyvillelive.app.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by tyr on 10/05/2014.
+ * Radio station entity as presented by the API
  */
 public class Station extends Entity {
 

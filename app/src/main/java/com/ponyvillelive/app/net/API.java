@@ -11,7 +11,8 @@ import retrofit.http.GET;
 import retrofit.http.Path;
 
 /**
- * <p>The code contract for the Ponyville Live! API as documented on <a href="http://docs.ponyvillelive.apiary.io/">Apiary</a></p>
+ * <p>The code contract for the Ponyville Live! API as documented on
+ * <a href="http://docs.ponyvillelive.apiary.io/">Apiary</a></p>
  */
 public interface API {
 
@@ -24,6 +25,10 @@ public interface API {
     @GET("/nowplaying")
     public void getNowPlaying(Callback<StationMetaResponse> callback);
 
+    /**
+     * <p>A builder class for {@link com.ponyvillelive.app.net.API}. A default builder will use
+     * http://ponyvillelive.com/api as the API host</p>
+     */
     public static class Builder {
         private String hostUrl;
 

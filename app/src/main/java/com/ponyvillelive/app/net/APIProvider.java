@@ -1,7 +1,8 @@
 package com.ponyvillelive.app.net;
 
 /**
- * Created by tyr on 10/05/2014.
+ * <p>Singleton manager for an instance of {@link com.ponyvillelive.app.net.API}. Allows sharing and
+ * reuse of a single instance.</p>
  */
 public final class APIProvider {
 
