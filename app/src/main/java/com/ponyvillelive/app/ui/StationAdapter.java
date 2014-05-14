@@ -35,7 +35,6 @@ public class StationAdapter extends BaseAdapter {
         stations = new Station[0];
 
         APIProvider.getInstance().getStationList(mode, new Callback<StationResponse>() {
-
             @Override
             public void success(StationResponse stationResponse, Response response) {
                 Log.d(TAG, "Response came back!");

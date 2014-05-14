@@ -1,6 +1,7 @@
 package com.ponyvillelive.app.net;
 
 import com.google.gson.Gson;
+import com.ponyvillelive.app.model.StationMetaResponse;
 import com.ponyvillelive.app.model.StationResponse;
 
 import retrofit.Callback;
@@ -8,10 +9,9 @@ import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 import retrofit.http.GET;
 import retrofit.http.Path;
-import retrofit.http.Query;
 
 /**
- * Created by tyr on 10/05/2014.
+ * <p>The code contract for the Ponyville Live! API as documented on <a href="http://docs.ponyvillelive.apiary.io/">Apiary</a></p>
  */
 public interface API {
 
@@ -20,6 +20,9 @@ public interface API {
 
     @GET("/station/list/category/{category}")
     public void getStationList(@Path("category")String category, Callback<StationResponse> callback);
+
+    @GET("/nowplaying")
+    public void getNowPlaying(Callback<StationMetaResponse> callback);
 
     public static class Builder {
         private String hostUrl;
