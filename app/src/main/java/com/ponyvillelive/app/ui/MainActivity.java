@@ -158,7 +158,7 @@ public class MainActivity extends Activity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        
+
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.ponyvillelive.app.net;
 
 import com.google.gson.Gson;
+import com.ponyvillelive.app.model.ShowResponse;
 import com.ponyvillelive.app.model.StationMetaResponse;
 import com.ponyvillelive.app.model.StationResponse;
 
@@ -24,6 +25,15 @@ public interface API {
 
     @GET("/nowplaying")
     public void getNowPlaying(Callback<StationMetaResponse> callback);
+
+    @GET("/show/latest")
+    public void getShows(Callback<ShowResponse> callback);
+
+    @GET("/show/index")
+    public void getAllShows(Callback<ShowResponse> callback);
+
+    @GET("/show/index/id/{id}")
+    public void getEpisodesForShow(@Path("id")String id, Callback<ShowResponse> callback);
 
     /**
      * <p>A builder class for {@link com.ponyvillelive.app.net.API}. A default builder will use
