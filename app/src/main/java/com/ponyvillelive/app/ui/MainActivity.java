@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import com.squareup.otto.Bus;
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
         StationFragment.OnFragmentInteractionListener,
+        BottomDrawerFragment.OnFragmentInteractionListener,
         ServiceConnection {
 
     private Bus eventBus;
@@ -152,6 +154,11 @@ public class MainActivity extends Activity
     @Override
     public void onServiceDisconnected(ComponentName name) {
         eventBus = null;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        
     }
 
     /**

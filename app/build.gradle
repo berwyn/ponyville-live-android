@@ -23,7 +23,7 @@ sourceSets {
 
 android {
     compileSdkVersion 19
-    buildToolsVersion '19.0.3'
+    buildToolsVersion '19.1'
 
     defaultConfig {
         minSdkVersion 14
@@ -53,4 +53,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.2.+'
     compile 'com.jakewharton:butterknife:4.0.+'
     compile 'com.android.support:support-v4:19.+'
+    compile 'com.sothree.slidinguppanel:library:+'
 }
