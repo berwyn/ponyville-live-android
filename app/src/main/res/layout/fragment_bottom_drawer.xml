@@ -4,10 +4,58 @@
     android:layout_height="match_parent"
     tools:context="com.ponyvillelive.app.ui.BottomDrawerFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="@dimen/bottom_drawer_peek_height"
+        android:orientation="horizontal"
+        android:background="@drawable/bottom_drawer_peek_background">
+        <ImageView
+            android:id="@+id/icon_bottom_bar"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="8dp"
+            tools:src="@drawable/square_logo" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/text_station_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="Celestia Radio" />
+            <TextView
+                android:id="@+id/text_station_track_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="Helping Twilight Win the Crown (Stupid Hunter Remix)"/>
+            <TextView
+                android:id="@+id/text_station_artist_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="SimGretina"/>
+            </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btn_drawer_cancel"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_marginStart="8dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_action_cancel"/>
+    </LinearLayout>
 
 </FrameLayout>

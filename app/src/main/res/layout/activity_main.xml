@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        app:panelHeight="68dp"
+        app:panelHeight="@dimen/bottom_drawer_peek_height"
         app:shadowHeight="4dp">
 
         <!-- As the main content view, the view below consumes the entire

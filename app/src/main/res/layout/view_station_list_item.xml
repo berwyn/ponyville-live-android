@@ -8,10 +8,9 @@
 
     <ImageView
         android:id="@+id/icon_station_logo"
-        android:layout_height="64dp"
-        android:layout_width="64dp"
-        android:layout_margin="8dp"
-        tools:src="@drawable/ic_launcher" />
+        style="@style/AppTheme.StationIcon"
+        android:contentDescription="@string/accessibility_station_icon"
+        tools:src="@drawable/square_logo" />
 
     <LinearLayout
         android:orientation="vertical"

@@ -5,4 +5,11 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="AppTheme.StationIcon">
+        <item name="android:layout_height">@dimen/icon_size</item>
+        <item name="android:layout_width">@dimen/icon_size</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
+
 </resources>
