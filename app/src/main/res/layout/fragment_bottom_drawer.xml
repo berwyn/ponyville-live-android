@@ -1,9 +1,9 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.ponyvillelive.app.ui.BottomDrawerFragment">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_drawer_peek_height"
@@ -11,22 +11,23 @@
         android:background="@drawable/bottom_drawer_peek_background">
         <ImageView
             android:id="@+id/icon_bottom_bar"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
             tools:src="@drawable/square_logo" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="8dp">
             <TextView
                 android:id="@+id/text_station_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:textAppearance="@android:style/TextAppearance.Large"
                 android:ellipsize="end"
                 android:maxLines="1"
                 tools:text="Celestia Radio" />
@@ -34,28 +35,26 @@
                 android:id="@+id/text_station_track_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                android:textAppearance="@android:style/TextAppearance.Small"
                 android:ellipsize="end"
                 android:maxLines="1"
-                tools:text="Helping Twilight Win the Crown (Stupid Hunter Remix)"/>
-            <TextView
-                android:id="@+id/text_station_artist_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                android:ellipsize="end"
-                android:maxLines="1"
-                tools:text="SimGretina"/>
+                tools:text="All pony, all the time"/>
+
             </LinearLayout>
 
         <ImageButton
             android:id="@+id/btn_drawer_cancel"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
-            android:layout_marginStart="8dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_action_cancel"/>
+            android:src="@drawable/ic_action_cancel"
+            android:layout_gravity="center_vertical"/>
     </LinearLayout>
 
-</FrameLayout>
+    <ListView
+        android:id="@+id/bottom_drawer_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:listitem="@layout/view_playlist_list_item"/>
+</LinearLayout>
