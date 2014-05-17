@@ -9,7 +9,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.LayoutInflater;
@@ -18,22 +17,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.Toast;
 
+import com.ponyvillelive.app.BusProvider;
 import com.ponyvillelive.app.R;
-import com.ponyvillelive.app.media.PlayRequestedEvent;
+import com.ponyvillelive.app.event.PlayRequestedEvent;
 import com.ponyvillelive.app.media.PlayerService;
 import com.ponyvillelive.app.model.Station;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 
-public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+public class MainActivity extends Activity implements
+        NavigationDrawerFragment.NavigationDrawerCallbacks,
         StationFragment.OnFragmentInteractionListener,
         BottomDrawerFragment.OnFragmentInteractionListener,
         ServiceConnection {
-
-    private Bus eventBus;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -140,25 +138,29 @@ public class MainActivity extends Activity
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onFragmentInteraction(Station station) {
-        eventBus.post(new PlayRequestedEvent(station.streamUrl));
-        PlayingTrackNotification.notify(getApplicationContext(), station.name, 42);
-    }
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-        eventBus = ((PlayerService.PlayerServiceBinder) service).getEventBus();
+        ((PlayerService.PlayerServiceBinder) service).setEventBus(BusProvider.getBus());
     }
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
-        eventBus = null;
+        // noop
+    }
+
+    /**
+     * Implements the callbacks for {@link com.ponyvillelive.app.ui.StationFragment}
+     * @param station The station that's been selected
+     */
+    @Override
+    public void onFragmentInteraction(Station station) {
+        // TODO: noop, maybe remove?
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onFragmentInteraction(int event) {
+        // TODO: noop, maybe remove?
     }
 
     /**

@@ -21,7 +21,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:layout=".MainActivity.PlaceholderFragment"/>
+            tools:layout="com.ponyvillelive.app.ui.MainActivity.PlaceholderFragment"/>
 
         <!-- The second child of a SlidingUpPanel is the content that
              shows in the drawer, with a bit of margin based on the
@@ -32,6 +32,7 @@
             android:layout_height="match_parent"
             android:gravity="center|top"
             android:name="com.ponyvillelive.app.ui.BottomDrawerFragment"
+            android:visibility="gone"
             tools:layout="@layout/fragment_bottom_drawer"/>
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>

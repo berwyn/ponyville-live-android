@@ -11,6 +11,9 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
+import com.ponyvillelive.app.event.PlayRequestedEvent;
+import com.ponyvillelive.app.event.StopRequestedEvent;
+import com.ponyvillelive.app.model.Station;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -19,7 +22,7 @@ import java.io.IOException;
 public class PlayerService extends Service implements AudioManager.OnAudioFocusChangeListener {
 
     private Bus eventBus;
-    private String currentStation;
+    private Station currentStation;
     private MediaPlayer mediaPlayer;
     private WifiManager.WifiLock wifiLock;
 
@@ -72,7 +75,7 @@ public class PlayerService extends Service implements AudioManager.OnAudioFocusC
 
     @Subscribe
     public void playRequested(PlayRequestedEvent event) {
-        currentStation = event.stationUrl;
+        currentStation = event.station;
 
         if(mediaPlayer != null) {
             mediaPlayer.release();
@@ -87,14 +90,11 @@ public class PlayerService extends Service implements AudioManager.OnAudioFocusC
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         try {
-            mediaPlayer.setDataSource(event.stationUrl);
+            mediaPlayer.setDataSource(event.station.streamUrl);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mediaPlayer.setOnPreparedListener((mediaPlayer) -> {
-            Log.d(TAG, "media player starting");
-            mediaPlayer.start();
-        });
+        mediaPlayer.setOnPreparedListener((mediaPlayer) -> mediaPlayer.start());
         mediaPlayer.setOnErrorListener((mediaPlayer, what, extra) -> {
             Log.d(TAG, "media player error");
             return false;
@@ -118,6 +118,10 @@ public class PlayerService extends Service implements AudioManager.OnAudioFocusC
 
     public class PlayerServiceBinder extends Binder {
 
+        public void setEventBus(Bus bus) {
+            eventBus = bus;
+            eventBus.register(PlayerService.this);
+        }
         public Bus getEventBus() {
             return eventBus;
         }
