@@ -3,7 +3,7 @@ package com.ponyvillelive.app.event;
 import com.ponyvillelive.app.model.Station;
 
 /**
- * Created by tyr on 13/05/2014.
+ * Event fired when a component wants to request playback of a given station
  */
 public class PlayRequestedEvent {
 

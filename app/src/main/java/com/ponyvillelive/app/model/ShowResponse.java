@@ -1,7 +1,7 @@
 package com.ponyvillelive.app.model;
 
 /**
- * Created by tyr on 15/05/2014.
+ * Presents the properties of an API response for the show endpoints
  */
 public class ShowResponse extends Response {
 

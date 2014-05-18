@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -20,10 +21,9 @@ import android.support.v4.widget.DrawerLayout;
 
 import com.ponyvillelive.app.BusProvider;
 import com.ponyvillelive.app.R;
-import com.ponyvillelive.app.event.PlayRequestedEvent;
+import com.ponyvillelive.app.event.PlaybackStartedEvent;
 import com.ponyvillelive.app.media.PlayerService;
 import com.ponyvillelive.app.model.Station;
-import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 
@@ -34,14 +34,25 @@ public class MainActivity extends Activity implements
         ServiceConnection {
 
     /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
+     * Fragment managing the behaviours, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+
+    /**
+     * Fragment managing the bahaviours, interactions and presentations of the bottom drawer.
+     */
+    private BottomDrawerFragment mBottomDrawerFragment;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+
+    /**
+     * Use this to keep track of the Fragment currently framed, that way we don't end up replacing
+     * fragments we don't need to.
+     */
+    private int mNavPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +61,8 @@ public class MainActivity extends Activity implements
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mBottomDrawerFragment = (BottomDrawerFragment)
+                getFragmentManager().findFragmentById(R.id.bottom_drawer);
         mTitle = getTitle();
 
         // Set up the drawer.
@@ -75,19 +88,28 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
-        String mode;
+        // update the main content by replacing fragments, noop-ing if we're not transitioning
+        if(position == mNavPosition) return;
+        Fragment fragment;
         switch(position) {
-            case 1:
-                mode = Station.STATION_TYPE_VIDEO;
-                break;
+            case 0:
             default:
-                mode = Station.STATION_TYPE_AUDIO;
+                fragment = StationFragment.newInstance(Station.STATION_TYPE_AUDIO);
+                break;
+            case 1:
+                fragment = StationFragment.newInstance(Station.STATION_TYPE_VIDEO);
+                break;
+            case 2:
+                fragment = ShowFragment.newInstance();
+                break;
+            case 3:
+                fragment = RequestFragment.newInstance();
                 break;
         }
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, StationFragment.newInstance(mode))
+                .replace(R.id.container, fragment)
+                .setTransition(FragmentTransaction.TRANSIT_ENTER_MASK)
                 .commit();
     }
 
@@ -161,6 +183,11 @@ public class MainActivity extends Activity implements
     @Override
     public void onFragmentInteraction(int event) {
         // TODO: noop, maybe remove?
+    }
+
+    @Subscribe
+    public void handlePlaybackStarted(PlaybackStartedEvent event) {
+
     }
 
     /**

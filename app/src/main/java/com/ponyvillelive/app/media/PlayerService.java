@@ -12,6 +12,7 @@ import android.os.PowerManager;
 import android.util.Log;
 
 import com.ponyvillelive.app.event.PlayRequestedEvent;
+import com.ponyvillelive.app.event.PlaybackStartedEvent;
 import com.ponyvillelive.app.event.StopRequestedEvent;
 import com.ponyvillelive.app.model.Station;
 import com.squareup.otto.Bus;
@@ -19,6 +20,9 @@ import com.squareup.otto.Subscribe;
 
 import java.io.IOException;
 
+/**
+ * An implementation of {@link android.app.Service} to handle media playback in its own process
+ */
 public class PlayerService extends Service implements AudioManager.OnAudioFocusChangeListener {
 
     private Bus eventBus;
@@ -94,7 +98,10 @@ public class PlayerService extends Service implements AudioManager.OnAudioFocusC
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mediaPlayer.setOnPreparedListener((mediaPlayer) -> mediaPlayer.start());
+        mediaPlayer.setOnPreparedListener((mediaPlayer) -> {
+            mediaPlayer.start();
+            eventBus.post(new PlaybackStartedEvent());
+        });
         mediaPlayer.setOnErrorListener((mediaPlayer, what, extra) -> {
             Log.d(TAG, "media player error");
             return false;
@@ -116,7 +123,19 @@ public class PlayerService extends Service implements AudioManager.OnAudioFocusC
         mediaPlayer = null;
     }
 
+    /**
+     * The communication layer for the service, mostly as a way to interact with the service's
+     * {@link com.squareup.otto.Bus} instance, the means through which this service interacts with
+     * other components.
+     */
     public class PlayerServiceBinder extends Binder {
+
+        public PlayerServiceBinder() {
+            if(eventBus == null) {
+                eventBus = new Bus();
+                eventBus.register(PlayerService.this);
+            }
+        }
 
         public void setEventBus(Bus bus) {
             eventBus = bus;

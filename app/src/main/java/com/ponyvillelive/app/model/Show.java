@@ -3,7 +3,7 @@ package com.ponyvillelive.app.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by tyr on 14/05/2014.
+ * Presents all the properties of API show objects
  */
 public class Show extends Entity {
 

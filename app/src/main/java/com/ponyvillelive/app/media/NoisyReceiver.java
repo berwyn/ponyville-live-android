@@ -8,6 +8,10 @@ import android.media.AudioManager;
 import com.ponyvillelive.app.BusProvider;
 import com.ponyvillelive.app.event.StopRequestedEvent;
 
+/**
+ * A broadcast receiver to hook {@link android.media.AudioManager#ACTION_AUDIO_BECOMING_NOISY}
+ * and stop playback.
+ */
 public class NoisyReceiver extends BroadcastReceiver {
     public NoisyReceiver() {
     }
