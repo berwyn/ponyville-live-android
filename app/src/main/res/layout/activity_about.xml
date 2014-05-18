@@ -19,10 +19,20 @@
 
     <TextView
         style="@android:style/TextAppearance.Large"
+        android:id="@+id/text_about_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/img_about_logotype"
+        android:layout_margin="8dp"
         tools:text="v0.1.0-DEBUG"/>
+
+    <Button
+        android:layout_below="@id/text_about_version"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/open_source_button_label"/>
 
 </RelativeLayout>

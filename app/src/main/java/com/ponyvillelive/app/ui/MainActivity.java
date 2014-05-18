@@ -90,22 +90,9 @@ public class MainActivity extends Activity implements
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments, noop-ing if we're not transitioning
         if(position == mNavPosition) return;
-        Fragment fragment;
-        switch(position) {
-            case 0:
-            default:
-                fragment = StationFragment.newInstance(Station.STATION_TYPE_AUDIO);
-                break;
-            case 1:
-                fragment = StationFragment.newInstance(Station.STATION_TYPE_VIDEO);
-                break;
-            case 2:
-                fragment = ShowFragment.newInstance();
-                break;
-            case 3:
-                fragment = RequestFragment.newInstance();
-                break;
-        }
+        NavigationEnum[] navItems = NavigationEnum.values();
+        int ordinal = position >= navItems.length? 0 : position;
+        Fragment fragment = NavigationEnum.values()[ordinal].getFragment();
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)

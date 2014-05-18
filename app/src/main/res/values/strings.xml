@@ -26,5 +26,6 @@
 
     <string name="title_activity_about">About</string>
     <string name="hello_world">Hello world!</string>
+    <string name="open_source_button_label">Open Source Licenses</string>
 
 </resources>

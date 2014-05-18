@@ -44,6 +44,13 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+    maven {
+        url "https://repo.commonsware.com.s3.amazonaws.com"
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     provided 'org.projectlombok:lombok:1.12.+'
@@ -54,4 +61,5 @@ dependencies {
     compile 'com.jakewharton:butterknife:4.0.+'
     compile 'com.android.support:support-v4:19.+'
     compile 'com.sothree.slidinguppanel:library:+'
+    compile 'com.commonsware.cwac:anddown:0.2.+'
 }
