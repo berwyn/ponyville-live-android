@@ -23,30 +23,27 @@ import com.ponyvillelive.app.BusProvider;
 import com.ponyvillelive.app.R;
 import com.ponyvillelive.app.event.PlaybackStartedEvent;
 import com.ponyvillelive.app.media.PlayerService;
-import com.ponyvillelive.app.model.Station;
 import com.squareup.otto.Subscribe;
 
 
 public class MainActivity extends Activity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
-        StationFragment.OnFragmentInteractionListener,
-        BottomDrawerFragment.OnFragmentInteractionListener,
         ServiceConnection {
 
     /**
      * Fragment managing the behaviours, interactions and presentation of the navigation drawer.
      */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private NavigationDrawerFragment navigationDrawerFragment;
 
     /**
      * Fragment managing the bahaviours, interactions and presentations of the bottom drawer.
      */
-    private BottomDrawerFragment mBottomDrawerFragment;
+    private BottomDrawerFragment bottomDrawerFragment;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
-    private CharSequence mTitle;
+    private CharSequence title;
 
     /**
      * Use this to keep track of the Fragment currently framed, that way we don't end up replacing
@@ -59,14 +56,14 @@ public class MainActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
+        navigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mBottomDrawerFragment = (BottomDrawerFragment)
+        bottomDrawerFragment = (BottomDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.bottom_drawer);
-        mTitle = getTitle();
+        title = getTitle();
 
         // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
+        navigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
@@ -100,34 +97,23 @@ public class MainActivity extends Activity implements
                 .commit();
     }
 
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_radio);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_video);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_shows);
-                break;
-            case 4:
-                mTitle = getString(R.string.title_requests);
-                break;
-        }
+    public void onSectionAttached(int position) {
+        String[] navLabels = getResources().getStringArray(R.array.navItems);
+        int ordinal = position >= navLabels.length? 0 : position;
+        title = navLabels[ordinal];
     }
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        actionBar.setTitle(title);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        if (!navigationDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
@@ -156,20 +142,6 @@ public class MainActivity extends Activity implements
     @Override
     public void onServiceDisconnected(ComponentName name) {
         // noop
-    }
-
-    /**
-     * Implements the callbacks for {@link com.ponyvillelive.app.ui.StationFragment}
-     * @param station The station that's been selected
-     */
-    @Override
-    public void onFragmentInteraction(Station station) {
-        // TODO: noop, maybe remove?
-    }
-
-    @Override
-    public void onFragmentInteraction(int event) {
-        // TODO: noop, maybe remove?
     }
 
     @Subscribe

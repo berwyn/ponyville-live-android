@@ -32,7 +32,7 @@ public class StationAdapter extends BaseAdapter {
 
     public StationAdapter(Context context, String mode) {
         this.context = context;
-        stations = new Station[0];
+        this.stations = new Station[0];
 
         APIProvider.getInstance().getStationList(mode, new Callback<StationResponse>() {
             @Override

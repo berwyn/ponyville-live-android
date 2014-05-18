@@ -31,13 +31,13 @@ public class ShowFragment extends Fragment implements AbsListView.OnItemClickLis
     /**
      * The fragment's ListView/GridView.
      */
-    private AbsListView mListView;
+    private AbsListView listView;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    private ListAdapter adapter;
 
     public static ShowFragment newInstance() {
         ShowFragment fragment = new ShowFragment();
@@ -58,7 +58,7 @@ public class ShowFragment extends Fragment implements AbsListView.OnItemClickLis
         super.onCreate(savedInstanceState);
 
         // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
+        adapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
     }
 
@@ -68,11 +68,11 @@ public class ShowFragment extends Fragment implements AbsListView.OnItemClickLis
         View view = inflater.inflate(R.layout.fragment_show, container, false);
 
         // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        listView = (AbsListView) view.findViewById(android.R.id.list);
+        ((AdapterView<ListAdapter>) listView).setAdapter(adapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
+        listView.setOnItemClickListener(this);
 
         return view;
     }
@@ -110,7 +110,7 @@ public class ShowFragment extends Fragment implements AbsListView.OnItemClickLis
      * to supply the text it should use.
      */
     public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
+        View emptyView = listView.getEmptyView();
 
         if (emptyText instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);

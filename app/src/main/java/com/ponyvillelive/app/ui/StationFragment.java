@@ -11,7 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.ponyvillelive.app.BusProvider;
 import com.ponyvillelive.app.R;
+import com.ponyvillelive.app.event.PlayRequestedEvent;
 import com.ponyvillelive.app.model.Station;
 
 /**
@@ -25,20 +27,22 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
 
     public static final String BUNDLE_KEY_MODE = "mode";
 
-    private OnFragmentInteractionListener mListener;
-
     /**
      * The fragment's ListView/GridView.
      */
-    private AbsListView mListView;
+    private AbsListView listView;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    private ListAdapter adapter;
 
-    // TODO: Rename and change types of parameters
+    /**
+     * Creates a new instance of {@link com.ponyvillelive.app.ui.StationFragment} in a given mode
+     * @param mode one of {@link Station#STATION_TYPE_AUDIO} or {@link Station#STATION_TYPE_VIDEO}
+     * @return
+     */
     public static StationFragment newInstance(String mode) {
         StationFragment fragment = new StationFragment();
         Bundle args = new Bundle();
@@ -58,7 +62,7 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAdapter = new StationAdapter(getActivity(), getArguments().getString(BUNDLE_KEY_MODE));
+        adapter = new StationAdapter(getActivity(), getArguments().getString(BUNDLE_KEY_MODE));
     }
 
     @Override
@@ -67,12 +71,12 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
         View view = inflater.inflate(R.layout.fragment_station, container, false);
 
         // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        mListView.setEmptyView(mListView.getRootView().findViewById(android.R.id.empty));
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        listView = (AbsListView) view.findViewById(android.R.id.list);
+        listView.setEmptyView(listView.getRootView().findViewById(android.R.id.empty));
+        listView.setAdapter(adapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
+        listView.setOnItemClickListener(this);
 
         return view;
     }
@@ -80,28 +84,17 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction((Station) mAdapter.getItem(position));
-        }
+        BusProvider.getBus().post(new PlayRequestedEvent((Station) adapter.getItem(position)));
     }
 
     /**
@@ -110,26 +103,11 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
      * to supply the text it should use.
      */
     public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
+        View emptyView = listView.getEmptyView();
 
         if (emptyText instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
         }
-    }
-
-    /**
-    * This interface must be implemented by activities that contain this
-    * fragment to allow an interaction in this fragment to be communicated
-    * to the activity and potentially other fragments contained in that
-    * activity.
-    * <p>
-    * See the Android Training lesson <a href=
-    * "http://developer.android.com/training/basics/fragments/communicating.html"
-    * >Communicating with Other Fragments</a> for more information.
-    */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Station station);
     }
 
 }
