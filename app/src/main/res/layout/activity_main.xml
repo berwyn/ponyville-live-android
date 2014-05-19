@@ -9,6 +9,7 @@
     tools:context="com.ponyvillelive.app.ui.MainActivity">
 
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:id="@+id/view_slideup_panel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
@@ -32,7 +33,6 @@
             android:layout_height="match_parent"
             android:gravity="center|top"
             android:name="com.ponyvillelive.app.ui.BottomDrawerFragment"
-            android:visibility="gone"
             tools:layout="@layout/fragment_bottom_drawer"/>
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>

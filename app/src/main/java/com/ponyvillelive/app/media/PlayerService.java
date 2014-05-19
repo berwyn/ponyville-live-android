@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.ponyvillelive.app.event.PlayRequestedEvent;
 import com.ponyvillelive.app.event.PlaybackStartedEvent;
+import com.ponyvillelive.app.event.PlaybackStoppedEvent;
 import com.ponyvillelive.app.event.StopRequestedEvent;
 import com.ponyvillelive.app.model.Station;
 import com.squareup.otto.Bus;
@@ -117,10 +118,18 @@ public class PlayerService extends Service implements AudioManager.OnAudioFocusC
 
     @Subscribe
     public void stopRequested(StopRequestedEvent event) {
-        wifiLock.release();
-        mediaPlayer.stop();
-        mediaPlayer.release();
-        mediaPlayer = null;
+        if(wifiLock != null) {
+            wifiLock.release();
+            wifiLock = null;
+        }
+        if(mediaPlayer != null) {
+            if(mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer.release();
+            mediaPlayer = null;
+            eventBus.post(new PlaybackStoppedEvent());
+        }
     }
 
     /**

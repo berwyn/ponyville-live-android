@@ -23,12 +23,19 @@ import com.ponyvillelive.app.BusProvider;
 import com.ponyvillelive.app.R;
 import com.ponyvillelive.app.event.PlaybackStartedEvent;
 import com.ponyvillelive.app.media.PlayerService;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.otto.Subscribe;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 
 public class MainActivity extends Activity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         ServiceConnection {
+
+    @InjectView(R.id.view_slideup_panel)
+    SlidingUpPanelLayout slidingPanel;
 
     /**
      * Fragment managing the behaviours, interactions and presentation of the navigation drawer.
@@ -55,6 +62,9 @@ public class MainActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.inject(this);
+
+        slidingPanel.setDragView(findViewById(R.id.layout_bottom_drawer_metadata));
 
         navigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);

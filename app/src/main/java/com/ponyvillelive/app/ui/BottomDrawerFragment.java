@@ -1,23 +1,44 @@
 package com.ponyvillelive.app.ui;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.ponyvillelive.app.BuildConfig;
 import com.ponyvillelive.app.BusProvider;
 import com.ponyvillelive.app.R;
+import com.ponyvillelive.app.event.PlayRequestedEvent;
+import com.ponyvillelive.app.event.PlaybackStoppedEvent;
 import com.ponyvillelive.app.event.StopRequestedEvent;
+import com.ponyvillelive.app.model.Station;
+import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * A basic fragment to handle the "now playing" drawer present in the main activity.
  */
 public class BottomDrawerFragment extends Fragment {
 
-    private ImageButton cancelButton;
+    @InjectView(R.id.icon_station_logo)
+    ImageView stationIcon;
+    @InjectView(R.id.text_station_name)
+    TextView stationName;
+    @InjectView(R.id.text_station_description)
+    TextView stationTag;
+    @InjectView(R.id.btn_drawer_cancel)
+    ImageButton cancelButton;
+
+    private Station station;
 
     /**
      * Use this factory method to create a new instance of
@@ -31,8 +52,10 @@ public class BottomDrawerFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public BottomDrawerFragment() {
         // Required empty public constructor
+        BusProvider.getBus().register(this);
     }
 
     @Override
@@ -45,7 +68,7 @@ public class BottomDrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bottom_drawer, container, false);
 
-        cancelButton = (ImageButton) view.findViewById(R.id.btn_drawer_cancel);
+        ButterKnife.inject(this, view);
         cancelButton.setOnClickListener((clickedView) -> BusProvider.getBus().post(new StopRequestedEvent()));
 
         return view;
@@ -59,6 +82,23 @@ public class BottomDrawerFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Subscribe
+    public void handleStationRequest(PlayRequestedEvent event) {
+        this.station = event.station;
+        stationName.setText(this.station.name);
+        stationTag.setText(this.station.genre);
+        Picasso.with(getActivity()).setDebugging(BuildConfig.DEBUG);
+        Picasso.with(getActivity())
+                .load(this.station.imageUrl)
+                .into(stationIcon);
+        this.getView().setVisibility(View.VISIBLE);
+    }
+
+    @Subscribe
+    public void handlePlaybackStopped(PlaybackStoppedEvent event) {
+        this.getView().setVisibility(View.GONE);
     }
 
 }
