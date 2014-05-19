@@ -27,6 +27,8 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
 
     public static final String BUNDLE_KEY_MODE = "mode";
 
+    private String mode;
+
     /**
      * The fragment's ListView/GridView.
      */
@@ -62,7 +64,8 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new StationAdapter(getActivity(), getArguments().getString(BUNDLE_KEY_MODE));
+        mode = getArguments().getString(BUNDLE_KEY_MODE);
+        adapter = new StationAdapter(getActivity(), mode);
     }
 
     @Override
@@ -94,7 +97,11 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        BusProvider.getBus().post(new PlayRequestedEvent((Station) adapter.getItem(position)));
+        if(mode.equals(Station.STATION_TYPE_AUDIO)) {
+            BusProvider.getBus().post(new PlayRequestedEvent((Station) adapter.getItem(position)));
+        } else {
+            // TODO: We need to do vidoe playback at some point
+        }
     }
 
     /**
