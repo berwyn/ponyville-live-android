@@ -49,7 +49,7 @@ public class MainActivity extends Activity implements
      * Use this to keep track of the Fragment currently framed, that way we don't end up replacing
      * fragments we don't need to.
      */
-    private int mNavPosition;
+    private int currentNavPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,10 +86,9 @@ public class MainActivity extends Activity implements
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments, noop-ing if we're not transitioning
-        if(position == mNavPosition) return;
-        NavigationEnum[] navItems = NavigationEnum.values();
-        int ordinal = position >= navItems.length? 0 : position;
-        Fragment fragment = NavigationEnum.values()[ordinal].getFragment();
+        if(position == currentNavPosition) return;
+        currentNavPosition = position;
+        Fragment fragment = NavigationEnum.values()[position].getFragment();
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
