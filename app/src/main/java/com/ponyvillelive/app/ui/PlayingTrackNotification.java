@@ -43,13 +43,18 @@ public class PlayingTrackNotification {
      * @see #cancel(Context)
      */
     public static void notify(final Context context,
-            final String exampleString, final int number) {
+            final String exampleString, final int number, final PendingIntent intent) {
+        final Notification notification = buildNotification(context, exampleString, number, intent);
+
+        notify(context, notification);
+    }
+
+    public static Notification buildNotification(Context context, String exampleString, int number, PendingIntent intent) {
         final Resources res = context.getResources();
 
         // This image is used as the notification's large icon (thumbnail).
         // TODO: Remove this if your notification has no relevant thumbnail.
         final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.example_picture);
-
 
         final String ticker = exampleString;
         final String title = res.getString(
@@ -57,7 +62,7 @@ public class PlayingTrackNotification {
         final String text = res.getString(
                 R.string.playing_track_notification_placeholder_text_template, exampleString);
 
-        final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
                 // Set appropriate defaults for the notification light, sound,
                 // and vibration.
@@ -125,9 +130,9 @@ public class PlayingTrackNotification {
                         null)
 
                 // Automatically dismiss the notification when it is touched.
-                .setAutoCancel(true);
-
-        notify(context, builder.build());
+                .setAutoCancel(true)
+                .setContentIntent(intent);
+        return builder.build();
     }
 
     @TargetApi(Build.VERSION_CODES.ECLAIR)

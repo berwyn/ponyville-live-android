@@ -86,19 +86,27 @@ public class BottomDrawerFragment extends Fragment {
 
     @Subscribe
     public void handleStationRequest(PlayRequestedEvent event) {
+        if(event.station == null) return;
         this.station = event.station;
-        stationName.setText(this.station.name);
-        stationTag.setText(this.station.genre);
-        Picasso.with(getActivity()).setDebugging(BuildConfig.DEBUG);
-        Picasso.with(getActivity())
-                .load(this.station.imageUrl)
-                .into(stationIcon);
-        this.getView().setVisibility(View.VISIBLE);
+
+        View view = this.getView();
+        if(view != null) {
+            stationName.setText(this.station.name);
+            stationTag.setText(this.station.genre);
+            Picasso.with(getActivity()).setDebugging(BuildConfig.DEBUG);
+            Picasso.with(getActivity())
+                    .load(this.station.imageUrl)
+                    .into(stationIcon);
+            view.setVisibility(View.VISIBLE);
+        }
     }
 
     @Subscribe
     public void handlePlaybackStopped(PlaybackStoppedEvent event) {
-        this.getView().setVisibility(View.GONE);
+        View view = this.getView();
+        if(view != null) {
+            view.setVisibility(View.GONE);
+        }
     }
 
 }

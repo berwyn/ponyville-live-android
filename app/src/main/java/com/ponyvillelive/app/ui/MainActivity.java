@@ -31,8 +31,7 @@ import butterknife.InjectView;
 
 
 public class MainActivity extends Activity implements
-        NavigationDrawerFragment.NavigationDrawerCallbacks,
-        ServiceConnection {
+        NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     @InjectView(R.id.view_slideup_panel)
     SlidingUpPanelLayout slidingPanel;
@@ -81,15 +80,13 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         Intent intent = new Intent(this, PlayerService.class);
-        bindService(intent, this, Context.BIND_AUTO_CREATE);
+        startService(intent);
 
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        unbindService(this);
-
         super.onPause();
     }
 
@@ -140,17 +137,6 @@ public class MainActivity extends Activity implements
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
-    }
-
-
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-        ((PlayerService.PlayerServiceBinder) service).setEventBus(BusProvider.getBus());
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-        // noop
     }
 
     @Subscribe

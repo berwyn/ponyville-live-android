@@ -1,5 +1,7 @@
 package com.ponyvillelive.app.media;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -11,12 +13,16 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
+import com.ponyvillelive.app.BusProvider;
 import com.ponyvillelive.app.event.PlayRequestedEvent;
 import com.ponyvillelive.app.event.PlaybackStartedEvent;
 import com.ponyvillelive.app.event.PlaybackStoppedEvent;
 import com.ponyvillelive.app.event.StopRequestedEvent;
 import com.ponyvillelive.app.model.Station;
+import com.ponyvillelive.app.ui.MainActivity;
+import com.ponyvillelive.app.ui.PlayingTrackNotification;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 
 import java.io.IOException;
@@ -31,6 +37,7 @@ public class PlayerService extends Service implements AudioManager.OnAudioFocusC
     private MediaPlayer mediaPlayer;
     private WifiManager.WifiLock wifiLock;
 
+    private static final int NOTIFICATION_ID = 1337;
     private static final String TAG = "MediaPlayer";
 
     public PlayerService() {
@@ -39,14 +46,24 @@ public class PlayerService extends Service implements AudioManager.OnAudioFocusC
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return new PlayerServiceBinder();
+    public void onCreate() {
+        eventBus = BusProvider.getBus();
+        eventBus.register(this);
     }
 
     @Override
     public void onDestroy() {
-        if(mediaPlayer != null) mediaPlayer.release();
+        if(mediaPlayer != null) {
+            if(mediaPlayer.isPlaying()) mediaPlayer.stop();
+            mediaPlayer.release();
+        }
+        eventBus.unregister(this);
         super.onDestroy();
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     @Override
@@ -80,6 +97,7 @@ public class PlayerService extends Service implements AudioManager.OnAudioFocusC
 
     @Subscribe
     public void playRequested(PlayRequestedEvent event) {
+        if(event.station == null) return;
         currentStation = event.station;
 
         if(mediaPlayer != null) {
@@ -101,7 +119,7 @@ public class PlayerService extends Service implements AudioManager.OnAudioFocusC
         }
         mediaPlayer.setOnPreparedListener((mediaPlayer) -> {
             mediaPlayer.start();
-            eventBus.post(new PlaybackStartedEvent());
+            eventBus.post(producePlaybackStartedEvent());
         });
         mediaPlayer.setOnErrorListener((mediaPlayer, what, extra) -> {
             Log.d(TAG, "media player error");
@@ -114,6 +132,13 @@ public class PlayerService extends Service implements AudioManager.OnAudioFocusC
         if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             mediaPlayer.prepareAsync();
         }
+        
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, NOTIFICATION_ID, notificationIntent, PendingIntent.FLAG_NO_CREATE);
+        Notification foregroundNotification =
+                PlayingTrackNotification.buildNotification(getApplicationContext(), "[DEBUG]", 42, pendingIntent);
+
+        startForeground(NOTIFICATION_ID,foregroundNotification);
     }
 
     @Subscribe
@@ -130,29 +155,16 @@ public class PlayerService extends Service implements AudioManager.OnAudioFocusC
             mediaPlayer = null;
             eventBus.post(new PlaybackStoppedEvent());
         }
+        stopForeground(true);
     }
 
-    /**
-     * The communication layer for the service, mostly as a way to interact with the service's
-     * {@link com.squareup.otto.Bus} instance, the means through which this service interacts with
-     * other components.
-     */
-    public class PlayerServiceBinder extends Binder {
+    @Produce
+    public PlayRequestedEvent producePlayRequestEvent() {
+        return new PlayRequestedEvent(currentStation);
+    }
 
-        public PlayerServiceBinder() {
-            if(eventBus == null) {
-                eventBus = new Bus();
-                eventBus.register(PlayerService.this);
-            }
-        }
-
-        public void setEventBus(Bus bus) {
-            eventBus = bus;
-            eventBus.register(PlayerService.this);
-        }
-        public Bus getEventBus() {
-            return eventBus;
-        }
-
+    @Produce
+    public PlaybackStartedEvent producePlaybackStartedEvent() {
+        return new PlaybackStartedEvent(currentStation);
     }
 }

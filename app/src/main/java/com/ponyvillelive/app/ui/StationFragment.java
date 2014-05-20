@@ -15,6 +15,7 @@ import com.ponyvillelive.app.BusProvider;
 import com.ponyvillelive.app.R;
 import com.ponyvillelive.app.event.PlayRequestedEvent;
 import com.ponyvillelive.app.model.Station;
+import com.squareup.otto.Produce;
 
 /**
  * A fragment representing a list of Items.
@@ -26,6 +27,8 @@ import com.ponyvillelive.app.model.Station;
 public class StationFragment extends Fragment implements AbsListView.OnItemClickListener {
 
     public static final String BUNDLE_KEY_MODE = "mode";
+
+    private static Station currentStation = null;
 
     private String mode;
 
@@ -87,20 +90,23 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        BusProvider.getBus().register(this);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        BusProvider.getBus().unregister(this);
     }
 
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if(mode.equals(Station.STATION_TYPE_AUDIO)) {
-            BusProvider.getBus().post(new PlayRequestedEvent((Station) adapter.getItem(position)));
+            currentStation = (Station) adapter.getItem(position);
+            BusProvider.getBus().post(new PlayRequestedEvent(currentStation));
         } else {
-            // TODO: We need to do vidoe playback at some point
+            // TODO: We need to do video playback at some point
         }
     }
 
