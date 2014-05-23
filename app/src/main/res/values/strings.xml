@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Ponyville Live</string>
+    <string name="app_name">Ponyville Live!</string>
     <string name="title_radio">Radio</string>
     <string name="title_video">Video</string>
     <string name="title_shows">Shows</string>
