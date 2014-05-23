@@ -58,14 +58,14 @@ public class StationAdapter extends BaseAdapter {
         service.getNowPlaying(new Callback<NowPlayingResponse>() {
             @Override
             public void success(NowPlayingResponse nowPlayingResponse, Response response) {
-                Timber.d("/nowplaying came back");
+                Timber.d("/nowplaying responded");
                 nowPlayingMetaMap = nowPlayingResponse.result;
                 notifyDataSetChanged();
             }
 
             @Override
             public void failure(RetrofitError error) {
-
+                Timber.d(error.getMessage());
             }
         });
     }

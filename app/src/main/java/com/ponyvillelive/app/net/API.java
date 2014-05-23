@@ -52,6 +52,7 @@ public interface API {
         private String hostUrl;
         private Client client;
         private Converter converter;
+        private RestAdapter.LogLevel logLevel;
 
         public Builder setHostUrl(String hostUrl) {
             this.hostUrl = hostUrl;
@@ -68,16 +69,22 @@ public interface API {
             return this;
         }
 
+        public Builder setLogLevel(RestAdapter.LogLevel logLevel) {
+            this.logLevel = logLevel;
+            return this;
+        }
+
         public API build() {
             if(hostUrl == null) hostUrl = "http://ponyvillelive.com/api";
             if(client == null) client = new OkClient();
             if(converter == null) converter = new GsonConverter(new Gson());
+            if(logLevel == null) logLevel = RestAdapter.LogLevel.NONE;
 
             return new RestAdapter.Builder()
                     .setEndpoint(hostUrl)
                     .setClient(client)
                     .setConverter(converter)
-                    .setLogLevel(BuildConfig.DEBUG? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
+                    .setLogLevel(logLevel)
                     .build()
                     .create(API.class);
         }

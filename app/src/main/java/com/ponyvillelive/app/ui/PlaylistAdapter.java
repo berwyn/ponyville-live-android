@@ -17,6 +17,7 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import timber.log.Timber;
 
 /**
  * Created by tyr on 22/05/2014.
@@ -28,6 +29,7 @@ public class PlaylistAdapter extends BaseAdapter {
 
     public PlaylistAdapter(Context context) {
         this.context = context;
+        Timber.tag("Playlist Adapter");
     }
 
     public void getData(int stationId) {
@@ -41,7 +43,7 @@ public class PlaylistAdapter extends BaseAdapter {
 
             @Override
             public void failure(RetrofitError error) {
-                // noop
+                Timber.d(error.getMessage());
             }
         });
     }
@@ -58,7 +60,7 @@ public class PlaylistAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return songs.get(position).id;
+        return songs.get(position).id.hashCode();
     }
 
     @Override
