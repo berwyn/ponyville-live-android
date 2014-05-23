@@ -11,10 +11,14 @@ import android.widget.TextView;
 
 import com.ponyvillelive.app.BuildConfig;
 import com.ponyvillelive.app.R;
+import com.ponyvillelive.app.model.NowPlayingResponse;
 import com.ponyvillelive.app.model.Station;
+import com.ponyvillelive.app.model.StationMetaResponse;
 import com.ponyvillelive.app.model.StationResponse;
 import com.ponyvillelive.app.net.APIProvider;
 import com.squareup.picasso.Picasso;
+
+import java.util.Map;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -29,6 +33,7 @@ public class StationAdapter extends BaseAdapter {
 
     private Station[] stations;
     private Context context;
+    private Map<String, NowPlayingResponse.NowPlayingMeta> nowPlayingMetaMap;
 
     public StationAdapter(Context context, String mode) {
         this.context = context;
@@ -37,14 +42,27 @@ public class StationAdapter extends BaseAdapter {
         APIProvider.getInstance().getStationList(mode, new Callback<StationResponse>() {
             @Override
             public void success(StationResponse stationResponse, Response response) {
-                Log.d(TAG, "Response came back!");
+                if(BuildConfig.DEBUG) Log.d(TAG, "Response came back!");
                 StationAdapter.this.stations = stationResponse.result;
                 notifyDataSetChanged();
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                Log.d(TAG, retrofitError.getMessage());
+                if(BuildConfig.DEBUG) Log.d(TAG, retrofitError.getMessage());
+            }
+        });
+        APIProvider.getInstance().getNowPlaying(new Callback<NowPlayingResponse>() {
+            @Override
+            public void success(NowPlayingResponse nowPlayingResponse, Response response) {
+                if(BuildConfig.DEBUG) Log.d(TAG, "/nowplaying came back");
+                nowPlayingMetaMap = nowPlayingResponse.result;
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
             }
         });
     }
@@ -91,13 +109,19 @@ public class StationAdapter extends BaseAdapter {
             convertView.setTag(R.id.text_station_artist_name, artistText);
         }
 
-        titleText.setText(getItem(position).name);
-        genreText.setText(getItem(position).genre);
-        trackText.setText("[DEBUG]");
-        artistText.setText("[DEBUG]");
+        Station station = getItem(position);
+        titleText.setText(station.name);
+        genreText.setText(station.genre);
+        if(nowPlayingMetaMap != null) {
+            trackText.setText(nowPlayingMetaMap.get(station.shortcode).currentSong.title);
+            artistText.setText(nowPlayingMetaMap.get(station.shortcode).currentSong.artist);
+        } else {
+            trackText.setVisibility(View.GONE);
+            artistText.setVisibility(View.GONE);
+        }
         Picasso.with(context).setDebugging(BuildConfig.DEBUG);
         Picasso.with(context)
-                .load(getItem(position).imageUrl)
+                .load(station.imageUrl)
                 .placeholder(R.drawable.square_logo)
                 .into(icon);
 

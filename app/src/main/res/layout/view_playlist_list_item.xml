@@ -4,35 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
-
-    <ImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:id="@+id/playlist_art"
-        android:layout_margin="8dp"
-        android:scaleType="centerCrop"
-        tools:src="@drawable/square_logo"/>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1">
+    android:layout_margin="8dp"
+    android:orientation="vertical">
         <TextView
             android:id="@+id/playlist_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@android:style/TextAppearance.Medium"
             tools:text="Helping Twilight Win the Crown (Stupid Hunter)"
-            android:singleLine="true"
-            android:layout_marginTop="8dp"/>
+            android:singleLine="true" />
         <TextView
+            android:id="@+id/playlist_artist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@android:style/TextAppearance.Small"
             tools:text="SimGretina"
-            android:singleLine="true"
-            android:layout_marginBottom="8dp"/>
-        </LinearLayout>
+            android:singleLine="true" />
 </LinearLayout>

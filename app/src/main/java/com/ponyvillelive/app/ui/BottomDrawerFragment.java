@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ponyvillelive.app.BuildConfig;
@@ -17,12 +18,21 @@ import com.ponyvillelive.app.R;
 import com.ponyvillelive.app.event.PlayRequestedEvent;
 import com.ponyvillelive.app.event.PlaybackStoppedEvent;
 import com.ponyvillelive.app.event.StopRequestedEvent;
+import com.ponyvillelive.app.model.NowPlayingResponse;
+import com.ponyvillelive.app.model.Song;
 import com.ponyvillelive.app.model.Station;
+import com.ponyvillelive.app.model.StationMetaResponse;
+import com.ponyvillelive.app.net.APIProvider;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * A basic fragment to handle the "now playing" drawer present in the main activity.
@@ -37,8 +47,11 @@ public class BottomDrawerFragment extends Fragment {
     TextView stationTag;
     @InjectView(R.id.btn_drawer_cancel)
     ImageButton cancelButton;
+    @InjectView(R.id.bottom_drawer_list)
+    ListView playlist;
 
     private Station station;
+    private PlaylistAdapter playlistAdapter;
 
     /**
      * Use this factory method to create a new instance of
@@ -55,12 +68,13 @@ public class BottomDrawerFragment extends Fragment {
 
     public BottomDrawerFragment() {
         // Required empty public constructor
-        BusProvider.getBus().register(this);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        BusProvider.getBus().register(this);
     }
 
     @Override
@@ -70,6 +84,7 @@ public class BottomDrawerFragment extends Fragment {
 
         ButterKnife.inject(this, view);
         cancelButton.setOnClickListener((clickedView) -> BusProvider.getBus().post(new StopRequestedEvent()));
+        playlist.setAdapter(playlistAdapter);
 
         return view;
     }
@@ -77,11 +92,18 @@ public class BottomDrawerFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        playlistAdapter = new PlaylistAdapter(activity);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BusProvider.getBus().unregister(this);
     }
 
     @Subscribe
@@ -99,6 +121,7 @@ public class BottomDrawerFragment extends Fragment {
                     .into(stationIcon);
             view.setVisibility(View.VISIBLE);
         }
+        playlistAdapter.getData(this.station.id);
     }
 
     @Subscribe

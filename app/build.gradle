@@ -47,7 +47,7 @@ android {
 repositories {
     mavenCentral()
     maven {
-        url "https://repo.commonsware.com.s3.amazonaws.com"
+        url 'https://repo.commonsware.com.s3.amazonaws.com'
     }
 }
 
@@ -62,4 +62,5 @@ dependencies {
     compile 'com.android.support:support-v4:19.+'
     compile 'com.sothree.slidinguppanel:library:+'
     compile 'com.commonsware.cwac:anddown:0.2.+'
+    compile 'com.jakewharton.timber:timber:2.3.+'
 }

@@ -1,6 +1,8 @@
 package com.ponyvillelive.app.net;
 
 import com.google.gson.Gson;
+import com.ponyvillelive.app.model.NowPlayingResponse;
+import com.ponyvillelive.app.model.NowPlayingStationResponse;
 import com.ponyvillelive.app.model.ShowResponse;
 import com.ponyvillelive.app.model.StationMetaResponse;
 import com.ponyvillelive.app.model.StationResponse;
@@ -24,7 +26,10 @@ public interface API {
     public void getStationList(@Path("category")String category, Callback<StationResponse> callback);
 
     @GET("/nowplaying")
-    public void getNowPlaying(Callback<StationMetaResponse> callback);
+    public void getNowPlaying(Callback<NowPlayingResponse> callback);
+
+    @GET("/nowplaying/index/id/{id}")
+    public void getNowPlayingForStation(@Path("id")int id, Callback<NowPlayingStationResponse> callback);
 
     @GET("/show/latest")
     public void getShows(Callback<ShowResponse> callback);
