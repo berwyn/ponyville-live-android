@@ -1,6 +1,7 @@
 package com.ponyvillelive.app.net;
 
 import com.google.gson.Gson;
+import com.ponyvillelive.app.BuildConfig;
 import com.ponyvillelive.app.model.NowPlayingResponse;
 import com.ponyvillelive.app.model.NowPlayingStationResponse;
 import com.ponyvillelive.app.model.ShowResponse;
@@ -9,6 +10,9 @@ import com.ponyvillelive.app.model.StationResponse;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
+import retrofit.client.Client;
+import retrofit.client.OkClient;
+import retrofit.converter.Converter;
 import retrofit.converter.GsonConverter;
 import retrofit.http.GET;
 import retrofit.http.Path;
@@ -46,18 +50,34 @@ public interface API {
      */
     public static class Builder {
         private String hostUrl;
+        private Client client;
+        private Converter converter;
 
         public Builder setHostUrl(String hostUrl) {
             this.hostUrl = hostUrl;
             return this;
         }
 
+        public Builder setClient(Client client) {
+            this.client = client;
+            return this;
+        }
+
+        public Builder setConverter(Converter converter) {
+            this.converter = converter;
+            return this;
+        }
+
         public API build() {
             if(hostUrl == null) hostUrl = "http://ponyvillelive.com/api";
+            if(client == null) client = new OkClient();
+            if(converter == null) converter = new GsonConverter(new Gson());
 
             return new RestAdapter.Builder()
                     .setEndpoint(hostUrl)
-                    .setConverter(new GsonConverter(new Gson()))
+                    .setClient(client)
+                    .setConverter(converter)
+                    .setLogLevel(BuildConfig.DEBUG? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
                     .build()
                     .create(API.class);
         }

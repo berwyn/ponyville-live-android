@@ -1,7 +1,6 @@
 package com.ponyvillelive.app.ui;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +10,11 @@ import android.widget.TextView;
 
 import com.ponyvillelive.app.BuildConfig;
 import com.ponyvillelive.app.R;
+import com.ponyvillelive.app.model.NowPlayingMeta;
 import com.ponyvillelive.app.model.NowPlayingResponse;
 import com.ponyvillelive.app.model.Station;
-import com.ponyvillelive.app.model.StationMetaResponse;
 import com.ponyvillelive.app.model.StationResponse;
+import com.ponyvillelive.app.net.API;
 import com.ponyvillelive.app.net.APIProvider;
 import com.squareup.picasso.Picasso;
 
@@ -23,6 +23,7 @@ import java.util.Map;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import timber.log.Timber;
 
 /**
  * Created by tyr on 10/05/2014.
@@ -33,29 +34,31 @@ public class StationAdapter extends BaseAdapter {
 
     private Station[] stations;
     private Context context;
-    private Map<String, NowPlayingResponse.NowPlayingMeta> nowPlayingMetaMap;
+    private Map<String, NowPlayingMeta> nowPlayingMetaMap;
 
     public StationAdapter(Context context, String mode) {
         this.context = context;
         this.stations = new Station[0];
+        Timber.tag(TAG);
 
-        APIProvider.getInstance().getStationList(mode, new Callback<StationResponse>() {
+        API service = APIProvider.getInstance();
+        service.getStationList(mode, new Callback<StationResponse>() {
             @Override
             public void success(StationResponse stationResponse, Response response) {
-                if(BuildConfig.DEBUG) Log.d(TAG, "Response came back!");
+                Timber.d("Response came back!");
                 StationAdapter.this.stations = stationResponse.result;
                 notifyDataSetChanged();
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                if(BuildConfig.DEBUG) Log.d(TAG, retrofitError.getMessage());
+                Timber.d(retrofitError.getMessage());
             }
         });
-        APIProvider.getInstance().getNowPlaying(new Callback<NowPlayingResponse>() {
+        service.getNowPlaying(new Callback<NowPlayingResponse>() {
             @Override
             public void success(NowPlayingResponse nowPlayingResponse, Response response) {
-                if(BuildConfig.DEBUG) Log.d(TAG, "/nowplaying came back");
+                Timber.d("/nowplaying came back");
                 nowPlayingMetaMap = nowPlayingResponse.result;
                 notifyDataSetChanged();
             }
