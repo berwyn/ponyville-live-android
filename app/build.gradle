@@ -67,4 +67,6 @@ dependencies {
     compile 'com.sothree.slidinguppanel:library:+'
     compile 'com.commonsware.cwac:anddown:0.2.+'
     compile 'com.jakewharton.timber:timber:2.3.+'
+    compile 'com.astuetz:pagerslidingtabstrip:1.0.+'
+    compile 'com.android.support:support-v13:19.+'
 }
