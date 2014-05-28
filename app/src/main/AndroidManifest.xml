@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:name=".PVL"
+        android:name="com.ponyvillelive.app.PVL"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -14,14 +14,14 @@
 
         <!-- Services -->
         <service
-            android:name=".media.PlayerService"
+            android:name="com.ponyvillelive.app.media.PlayerService"
             android:enabled="true"
             android:exported="false" >
         </service>
 
         <!-- Broadcast receivers -->
         <receiver
-            android:name=".media.NoisyReceiver"
+            android:name="com.ponyvillelive.app.media.NoisyReceiver"
             android:enabled="true"
             android:exported="false" >
             <intent-filter>
@@ -45,6 +45,14 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.ponyvillelive.app.ui.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".ui.MainActivityRedux" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivityRedux" />
         </activity>
     </application>
 
