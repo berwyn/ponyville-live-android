@@ -9,8 +9,9 @@
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/view_station_list_item"
-        android:smoothScrollbar="true"/>
+        android:smoothScrollbar="true"
+        android:animateLayoutChanges="true"
+        tools:listitem="@layout/view_station_list_item"/>
 
     <ImageView
         android:id="@android:id/empty"

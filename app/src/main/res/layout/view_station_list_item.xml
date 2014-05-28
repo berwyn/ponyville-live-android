@@ -35,23 +35,6 @@
             android:ellipsize="end"
             android:maxLines="1"
             tools:text="All Pony, All The Time"/>
-        <TextView
-            android:id="@+id/text_station_track_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-            android:ellipsize="end"
-            android:maxLines="1"
-            tools:text="Helping Twilight Win the Crown (Stupid Hunter Remix)"/>
-        <TextView
-            android:id="@+id/text_station_artist_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-            android:ellipsize="end"
-            android:maxLines="1"
-            tools:text="SimGretina"/>
     </LinearLayout>
 
 </LinearLayout>

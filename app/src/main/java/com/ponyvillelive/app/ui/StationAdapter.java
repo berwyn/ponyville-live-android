@@ -20,6 +20,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Map;
 
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -85,15 +86,11 @@ public class StationAdapter extends BaseAdapter {
         ImageView icon;
         TextView titleText;
         TextView genreText;
-        TextView trackText;
-        TextView artistText;
 
         if(convertView != null) {
             icon = (ImageView) convertView.getTag(R.id.icon_station_logo);
             titleText = (TextView) convertView.getTag(R.id.text_station_name);
             genreText = (TextView) convertView.getTag(R.id.text_station_description);
-            trackText = (TextView) convertView.getTag(R.id.text_station_track_name);
-            artistText = (TextView) convertView.getTag(R.id.text_station_artist_name);
         } else {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.view_station_list_item, parent, false);
@@ -102,26 +99,15 @@ public class StationAdapter extends BaseAdapter {
             icon = (ImageView) convertView.findViewById(R.id.icon_station_logo);
             titleText = (TextView) convertView.findViewById(R.id.text_station_name);
             genreText = (TextView) convertView.findViewById(R.id.text_station_description);
-            trackText = (TextView) convertView.findViewById(R.id.text_station_track_name);
-            artistText = (TextView) convertView.findViewById(R.id.text_station_artist_name);
 
             convertView.setTag(R.id.icon_station_logo, icon);
             convertView.setTag(R.id.text_station_name, titleText);
             convertView.setTag(R.id.text_station_description, genreText);
-            convertView.setTag(R.id.text_station_track_name, trackText);
-            convertView.setTag(R.id.text_station_artist_name, artistText);
         }
 
         Station station = getItem(position);
         titleText.setText(station.name);
         genreText.setText(station.genre);
-        if(nowPlayingMetaMap != null) {
-            trackText.setText(nowPlayingMetaMap.get(station.shortcode).currentSong.title);
-            artistText.setText(nowPlayingMetaMap.get(station.shortcode).currentSong.artist);
-        } else {
-            trackText.setVisibility(View.GONE);
-            artistText.setVisibility(View.GONE);
-        }
         Picasso.with(context).setDebugging(BuildConfig.DEBUG);
         Picasso.with(context)
                 .load(station.imageUrl)
