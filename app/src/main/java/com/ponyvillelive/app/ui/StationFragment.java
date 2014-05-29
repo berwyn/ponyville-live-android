@@ -99,7 +99,6 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
         BusProvider.getBus().unregister(this);
     }
 
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if(mode.equals(Station.STATION_TYPE_AUDIO)) {

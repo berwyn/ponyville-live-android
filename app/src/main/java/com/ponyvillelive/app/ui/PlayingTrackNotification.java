@@ -42,19 +42,18 @@ public class PlayingTrackNotification {
      *
      * @see #cancel(Context)
      */
-    public static void notify(final Context context,
-            final String exampleString, final int number, final PendingIntent intent) {
-        final Notification notification = buildNotification(context, exampleString, number, intent);
+    public static void notify(final Context context, final String exampleString) {
+        final Notification notification = buildNotification(context, exampleString);
 
         notify(context, notification);
     }
 
-    public static Notification buildNotification(Context context, String exampleString, int number, PendingIntent intent) {
+    public static Notification buildNotification(Context context, String exampleString) {
         final Resources res = context.getResources();
 
         // This image is used as the notification's large icon (thumbnail).
         // TODO: Remove this if your notification has no relevant thumbnail.
-        final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.example_picture);
+//        final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.example_picture);
 
         final String ticker = exampleString;
         final String title = res.getString(
@@ -63,11 +62,6 @@ public class PlayingTrackNotification {
                 R.string.playing_track_notification_placeholder_text_template, exampleString);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-
-                // Set appropriate defaults for the notification light, sound,
-                // and vibration.
-                .setDefaults(Notification.DEFAULT_ALL)
-
                 // Set required fields, including the small icon, the
                 // notification title, and text.
                 .setSmallIcon(R.drawable.ic_launcher)
@@ -78,27 +72,15 @@ public class PlayingTrackNotification {
 
                 // Use a default priority (recognized on devices running Android
                 // 4.1 or later)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
 
                 // Provide a large icon, shown with the notification in the
                 // notification drawer on devices running Android 3.0 or later.
-                .setLargeIcon(picture)
+                // TODO: Set the station icon here
+//                .setLargeIcon(picture)
 
                 // Set ticker text (preview) information for this notification.
                 .setTicker(ticker)
-
-                // Show a number. This is useful when stacking notifications of
-                // a single type.
-                .setNumber(number)
-
-                // If this notification relates to a past or upcoming event, you
-                // should set the relevant time information using the setWhen
-                // method below. If this call is omitted, the notification's
-                // timestamp will by set to the time at which it was shown.
-                // TODO: Call setWhen if this notification relates to a past or
-                // upcoming event. The sole argument to this method should be
-                // the notification timestamp in milliseconds.
-                //.setWhen(...)
 
                 // Set the pending intent to be initiated when the user touches
                 // the notification.
@@ -106,32 +88,18 @@ public class PlayingTrackNotification {
                         PendingIntent.getActivity(
                                 context,
                                 0,
-                                new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com")),
+                                new Intent(context, MainActivityRedux.class),
                                 PendingIntent.FLAG_UPDATE_CURRENT))
 
-                // Example additional actions for this notification. These will
-                // only show on devices running Android 4.1 or later, so you
-                // should ensure that the activity in this notification's
-                // content intent provides access to the same actions in
-                // another way.
+                // Add an action on 4.1+ that will kill playback of the current
+                // station
                 .addAction(
-                        R.drawable.ic_action_stat_share,
-                        res.getString(R.string.action_share),
-                        PendingIntent.getActivity(
-                                context,
-                                0,
-                                Intent.createChooser(new Intent(Intent.ACTION_SEND)
-                                        .setType("text/plain")
-                                        .putExtra(Intent.EXTRA_TEXT, "Dummy text"), "Dummy title"),
-                                PendingIntent.FLAG_UPDATE_CURRENT))
-                .addAction(
-                        R.drawable.ic_action_stat_reply,
-                        res.getString(R.string.action_reply),
+                        R.drawable.ic_action_cancel,
+                        res.getString(R.string.action_cancel),
                         null)
 
                 // Automatically dismiss the notification when it is touched.
-                .setAutoCancel(true)
-                .setContentIntent(intent);
+                .setAutoCancel(true);
         return builder.build();
     }
 
@@ -148,7 +116,7 @@ public class PlayingTrackNotification {
 
     /**
      * Cancels any notifications of this type previously shown using
-     * {@link #notify(Context, String, int)}.
+     * {@link #notify(Context, String)}.
      */
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     public static void cancel(final Context context) {

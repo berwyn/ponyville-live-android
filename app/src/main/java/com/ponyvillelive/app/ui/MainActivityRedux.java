@@ -12,13 +12,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.ponyvillelive.app.R;
+import com.ponyvillelive.app.media.PlayerService;
 import com.ponyvillelive.app.model.Station;
-
-import java.util.Locale;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -42,6 +41,8 @@ public class MainActivityRedux extends Activity {
     ViewPager viewPager;
     @InjectView(R.id.tabs)
     PagerSlidingTabStrip tabStrip;
+    @InjectView(R.id.view_slideup_panel)
+    SlidingUpPanelLayout slidingPanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +53,16 @@ public class MainActivityRedux extends Activity {
         // primary sections of the activity.
         sectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
         ButterKnife.inject(this);
+
+        // Set up the ViewPager with the sections adapter.
         viewPager.setAdapter(sectionsPagerAdapter);
         tabStrip.setViewPager(viewPager);
+
+        slidingPanel.setDragView(findViewById(R.id.layout_bottom_drawer_metadata));
+
+        Intent intent = new Intent(this, PlayerService.class);
+        startService(intent);
     }
 
 

@@ -57,6 +57,12 @@ public class PlayerService extends Service implements AudioManager.OnAudioFocusC
             if(mediaPlayer.isPlaying()) mediaPlayer.stop();
             mediaPlayer.release();
         }
+
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager.abandonAudioFocus((focusChange) -> {
+            // TODO: Do we need anything here?
+        });
+
         eventBus.unregister(this);
         super.onDestroy();
     }
@@ -109,36 +115,40 @@ public class PlayerService extends Service implements AudioManager.OnAudioFocusC
                 .createWifiLock(WifiManager.WIFI_MODE_FULL, "com.ponyvillelive.app");
         wifiLock.acquire();
 
+        prepareMediaPlayer(event);
+        
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        Notification foregroundNotification = PlayingTrackNotification.buildNotification(getApplicationContext(), "[DEBUG]");
+
+        startForeground(NOTIFICATION_ID,foregroundNotification);
+    }
+
+    private void prepareMediaPlayer(PlayRequestedEvent event) {
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+
         try {
             mediaPlayer.setDataSource(event.station.streamUrl);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         mediaPlayer.setOnPreparedListener((mediaPlayer) -> {
             mediaPlayer.start();
             eventBus.post(producePlaybackStartedEvent());
         });
+
         mediaPlayer.setOnErrorListener((mediaPlayer, what, extra) -> {
             Log.d(TAG, "media player error");
             return false;
         });
-        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        int result = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC,
-                AudioManager.AUDIOFOCUS_GAIN);
 
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        int result = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             mediaPlayer.prepareAsync();
         }
-        
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, NOTIFICATION_ID, notificationIntent, PendingIntent.FLAG_NO_CREATE);
-        Notification foregroundNotification =
-                PlayingTrackNotification.buildNotification(getApplicationContext(), "[DEBUG]", 42, pendingIntent);
-
-        startForeground(NOTIFICATION_ID,foregroundNotification);
     }
 
     @Subscribe
