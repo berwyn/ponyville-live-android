@@ -11,20 +11,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ponyvillelive.app.BuildConfig;
+import com.ponyvillelive.app.BusProvider;
+import com.ponyvillelive.app.DataCache;
 import com.ponyvillelive.app.R;
+import com.ponyvillelive.app.event.DataCacheChangedEvent;
 import com.ponyvillelive.app.model.NowPlayingMeta;
-import com.ponyvillelive.app.model.NowPlayingResponse;
 import com.ponyvillelive.app.model.Station;
-import com.ponyvillelive.app.model.StationResponse;
-import com.ponyvillelive.app.net.API;
-import com.ponyvillelive.app.net.APIProvider;
+import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import timber.log.Timber;
 
 /**
@@ -38,45 +37,24 @@ public class StationAdapter extends BaseAdapter {
     private Station[] stations;
     private Context context;
     private Map<String, NowPlayingMeta> nowPlayingMetaMap;
-    private boolean isInAudioMode;
+    private String mode;
+    private SharedPreferences prefs;
 
     public StationAdapter(Context context, String mode) {
-        this.context = context;
-        this.stations = new Station[0];
-        this.isInAudioMode = mode.equals(Station.STATION_TYPE_AUDIO);
         Timber.tag(TAG);
 
-        API service = APIProvider.getInstance();
-        service.getStationList(mode, new Callback<StationResponse>() {
-            @Override
-            public void success(StationResponse stationResponse, Response response) {
-                Timber.d("Response came back!");
-                StationAdapter.this.stations = stationResponse.result;
-                notifyDataSetChanged();
-            }
+        BusProvider.getBus().register(this);
 
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Timber.d(retrofitError.getMessage());
-            }
-        });
+        this.context = context;
+        this.mode = mode;
+        this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        this.stations = DataCache.retrieveStationList(mode);
+        notifyDataSetChanged();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if(mode.equals(Station.STATION_TYPE_AUDIO)
                 && prefs.getBoolean(SettingsActivity.PREF_KEY_HIPOWER_MODE, false)) {
-            service.getNowPlaying(new Callback<NowPlayingResponse>() {
-                @Override
-                public void success(NowPlayingResponse nowPlayingResponse, Response response) {
-                    Timber.d("/nowplaying responded");
-                    nowPlayingMetaMap = nowPlayingResponse.result;
-                    notifyDataSetChanged();
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    Timber.d(error.getMessage());
-                }
-            });
+            //TODO: Get now playing data
         }
     }
 
@@ -91,64 +69,64 @@ public class StationAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        ImageView icon;
-        TextView titleText;
-        TextView genreText;
-        TextView trackText;
-        TextView artistText;
-
+        ViewHolder holder;
         if(convertView != null) {
-            icon = (ImageView) convertView.getTag(R.id.icon_station_logo);
-            titleText = (TextView) convertView.getTag(R.id.text_station_name);
-            genreText = (TextView) convertView.getTag(R.id.text_station_description);
-            trackText = (TextView) convertView.getTag(R.id.text_station_track_name);
-            artistText = (TextView) convertView.getTag(R.id.text_station_artist_name);
+            holder = (ViewHolder) convertView.getTag();
         } else {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.view_station_list_item, parent, false);
-
-            assert convertView != null;
-            icon = (ImageView) convertView.findViewById(R.id.icon_station_logo);
-            titleText = (TextView) convertView.findViewById(R.id.text_station_name);
-            genreText = (TextView) convertView.findViewById(R.id.text_station_description);
-            trackText = (TextView) convertView.findViewById(R.id.text_station_track_name);
-            artistText = (TextView) convertView.findViewById(R.id.text_station_artist_name);
-
-            convertView.setTag(R.id.icon_station_logo, icon);
-            convertView.setTag(R.id.text_station_name, titleText);
-            convertView.setTag(R.id.text_station_description, genreText);
-            convertView.setTag(R.id.text_station_track_name, trackText);
-            convertView.setTag(R.id.text_station_artist_name, artistText);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
         }
 
         Station station = getItem(position);
-        titleText.setText(station.name);
-        genreText.setText(station.genre);
+        holder.titleText.setText(station.name);
+        holder.genreText.setText(station.genre);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if(isInAudioMode
+        if(mode.equals(Station.STATION_TYPE_AUDIO)
                 && nowPlayingMetaMap != null
                 && prefs.getBoolean(SettingsActivity.PREF_KEY_HIPOWER_MODE, false)) {
             if(nowPlayingMetaMap.get(station.shortcode).currentSong.title != null) {
-                trackText.setText(nowPlayingMetaMap.get(station.shortcode).currentSong.title);
-                trackText.setVisibility(View.VISIBLE);
+                holder.trackText.setText(nowPlayingMetaMap.get(station.shortcode).currentSong.title);
+                holder.trackText.setVisibility(View.VISIBLE);
             }
             if(nowPlayingMetaMap.get(station.shortcode).currentSong.artist != null) {
-                artistText.setText(nowPlayingMetaMap.get(station.shortcode).currentSong.artist);
-                artistText.setVisibility(View.VISIBLE);
+                holder.artistText.setText(nowPlayingMetaMap.get(station.shortcode).currentSong.artist);
+                holder.artistText.setVisibility(View.VISIBLE);
             }
-        } else {
-            trackText.setVisibility(View.GONE);
-            artistText.setVisibility(View.GONE);
         }
 
         Picasso.with(context).setDebugging(BuildConfig.DEBUG);
         Picasso.with(context)
                 .load(station.imageUrl)
-                .placeholder(R.drawable.square_logo)
-                .into(icon);
+                .into(holder.icon);
 
         return convertView;
+    }
+
+    @Subscribe
+    public void receiveDataChangeEvent(DataCacheChangedEvent event) {
+        if(!event.eventType.equals(DataCacheChangedEvent.EVT_KEY_STATION_LIST_CHANGED)) return;
+
+        stations = DataCache.retrieveStationList(mode);
+        notifyDataSetChanged();
+    }
+
+    public class ViewHolder {
+
+        @InjectView(R.id.icon_station_logo)
+        ImageView icon;
+        @InjectView(R.id.text_station_name)
+        TextView titleText;
+        @InjectView(R.id.text_station_description)
+        TextView genreText;
+        @InjectView(R.id.text_station_track_name)
+        TextView trackText;
+        @InjectView(R.id.text_station_artist_name)
+        TextView artistText;
+
+        public ViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
     }
 }

@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:smoothScrollbar="true"
-        android:animateLayoutChanges="true"
         tools:listitem="@layout/view_station_list_item"/>
 
     <ImageView
