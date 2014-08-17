@@ -130,23 +130,23 @@
         android:layout_gravity="start|end|center_vertical"
         style="@android:style/Widget.Holo.Spinner"/>
 
-    <TextView
-        android:layout_gravity="start|end|center_vertical"
-        android:text="Pixel Grid"
-        style="@style/Widget.Wallet.DebugDrawer.RowTitle" />
-    <Switch
-        android:id="@+id/debug_ui_pixel_grid"
-        android:layout_gravity="start|center_vertical"
-        style="@style/Widget.Wallet.DebugDrawer.RowWidget" />
+    <!--<TextView-->
+        <!--android:layout_gravity="start|end|center_vertical"-->
+        <!--android:text="Pixel Grid"-->
+        <!--style="@style/Widget.Wallet.DebugDrawer.RowTitle" />-->
+    <!--<Switch-->
+        <!--android:id="@+id/debug_ui_pixel_grid"-->
+        <!--android:layout_gravity="start|center_vertical"-->
+        <!--style="@style/Widget.Wallet.DebugDrawer.RowWidget" />-->
 
-    <TextView
-        android:layout_gravity="start|end|center_vertical"
-        android:text="Pixel Scale"
-        style="@style/Widget.Wallet.DebugDrawer.RowTitle" />
-    <Switch
-        android:id="@+id/debug_ui_pixel_ratio"
-        android:layout_gravity="start|center_vertical"
-        style="@style/Widget.Wallet.DebugDrawer.RowWidget" />
+    <!--<TextView-->
+        <!--android:layout_gravity="start|end|center_vertical"-->
+        <!--android:text="Pixel Scale"-->
+        <!--style="@style/Widget.Wallet.DebugDrawer.RowTitle" />-->
+    <!--<Switch-->
+        <!--android:id="@+id/debug_ui_pixel_ratio"-->
+        <!--android:layout_gravity="start|center_vertical"-->
+        <!--style="@style/Widget.Wallet.DebugDrawer.RowWidget" />-->
 
     <TextView
         android:layout_gravity="start|end|center_vertical"

@@ -54,6 +54,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -103,8 +104,8 @@ public class DebugAppContainer implements AppContainer {
     @InjectView(R.id.debug_content)
     ViewGroup    content;
 
-    @InjectView(R.id.madge_container)
-    MadgeFrameLayout   madgeFrameLayout;
+//    @InjectView(R.id.madge_container)
+//    MadgeFrameLayout   madgeFrameLayout;
     @InjectView(R.id.debug_content)
     ScalpelFrameLayout scalpelFrameLayout;
 
@@ -125,10 +126,10 @@ public class DebugAppContainer implements AppContainer {
 
     @InjectView(R.id.debug_ui_animation_speed)
     Spinner uiAnimationSpeedView;
-    @InjectView(R.id.debug_ui_pixel_grid)
-    Switch  uiPixelGridView;
-    @InjectView(R.id.debug_ui_pixel_ratio)
-    Switch  uiPixelRatioView;
+//    @InjectView(R.id.debug_ui_pixel_grid)
+//    Switch  uiPixelGridView;
+//    @InjectView(R.id.debug_ui_pixel_ratio)
+//    Switch  uiPixelRatioView;
     @InjectView(R.id.debug_ui_scalpel)
     Switch  uiScalpelView;
     @InjectView(R.id.debug_ui_scalpel_wireframe)
@@ -212,12 +213,22 @@ public class DebugAppContainer implements AppContainer {
         this.activity = activity;
         this.drawerContext = activity;
 
+        Timber.d("Starting DebugAppContainer#get");
+        long start = System.nanoTime();
+
         activity.setContentView(R.layout.debug_activity_frame);
+        long diff = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
+        Timber.d("Took %sms to set content view", diff);
 
         ViewGroup drawer = (ViewGroup) activity.findViewById(R.id.debug_drawer);
         LayoutInflater.from(drawerContext).inflate(R.layout.debug_drawer_content, drawer);
+        diff = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
+        Timber.d("Took %sms to inflate drawer", diff);
 
         ButterKnife.inject(this, activity);
+
+        diff = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
+        Timber.d("Took %sms to inject DebugAppContainer views", diff);
 
         drawerLayout.setDrawerShadow(R.drawable.debug_drawer_shadow, Gravity.END);
         drawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
@@ -239,10 +250,20 @@ public class DebugAppContainer implements AppContainer {
         }
 
         setupNetworkSection();
+        diff = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
+        Timber.d("Took %sms to setup network section", diff);
         setupUserInterfaceSection();
+        diff = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
+        Timber.d("Took %sms to setup ui section", diff);
         setupBuildSection();
+        diff = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
+        Timber.d("Took %sms to setup build section", diff);
         setupDeviceSection();
+        diff = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
+        Timber.d("Took %sms to setup device section", diff);
         setupPicassoSection();
+        diff = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
+        Timber.d("Took %sms to setup picasso section", diff);
 
         return content;
     }
@@ -427,29 +448,29 @@ public class DebugAppContainer implements AppContainer {
             }
         });
 
-        boolean gridEnabled = pixelGridEnabled.get();
-        madgeFrameLayout.setOverlayEnabled(gridEnabled);
-        uiPixelGridView.setChecked(gridEnabled);
-        uiPixelRatioView.setEnabled(gridEnabled);
-        uiPixelGridView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Timber.d("Setting pixel grid overlay enabled to " + isChecked);
-                pixelGridEnabled.set(isChecked);
-                madgeFrameLayout.setOverlayEnabled(isChecked);
-                uiPixelRatioView.setEnabled(isChecked);
-            }
-        });
-
-        boolean ratioEnabled = pixelRatioEnabled.get();
-        madgeFrameLayout.setOverlayRatioEnabled(ratioEnabled);
-        uiPixelRatioView.setChecked(ratioEnabled);
-        uiPixelRatioView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Timber.d("Setting pixel scale overlay enabled to " + isChecked);
-                pixelRatioEnabled.set(isChecked);
-                madgeFrameLayout.setOverlayRatioEnabled(isChecked);
-            }
-        });
+//        boolean gridEnabled = pixelGridEnabled.get();
+//        madgeFrameLayout.setOverlayEnabled(gridEnabled);
+//        uiPixelGridView.setChecked(gridEnabled);
+//        uiPixelRatioView.setEnabled(gridEnabled);
+//        uiPixelGridView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                Timber.d("Setting pixel grid overlay enabled to " + isChecked);
+//                pixelGridEnabled.set(isChecked);
+//                madgeFrameLayout.setOverlayEnabled(isChecked);
+//                uiPixelRatioView.setEnabled(isChecked);
+//            }
+//        });
+//
+//        boolean ratioEnabled = pixelRatioEnabled.get();
+//        madgeFrameLayout.setOverlayRatioEnabled(ratioEnabled);
+//        uiPixelRatioView.setChecked(ratioEnabled);
+//        uiPixelRatioView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                Timber.d("Setting pixel scale overlay enabled to " + isChecked);
+//                pixelRatioEnabled.set(isChecked);
+//                madgeFrameLayout.setOverlayRatioEnabled(isChecked);
+//            }
+//        });
 
         boolean scalpel = scalpelEnabled.get();
         scalpelFrameLayout.setLayerInteractionEnabled(scalpel);

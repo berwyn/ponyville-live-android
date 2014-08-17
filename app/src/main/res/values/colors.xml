@@ -1,3 +1,4 @@
 <resources>
-    <color name="AppColor">#1579D5</color>
+    <color name="colorPrimary">#1579D5</color>
+    <color name="colorPrimaryDark">#105CA2</color>
 </resources>

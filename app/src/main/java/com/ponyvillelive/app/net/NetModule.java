@@ -3,6 +3,7 @@ package com.ponyvillelive.app.net;
 import android.app.Application;
 import android.net.http.HttpResponseCache;
 
+import com.ponyvillelive.app.ui.StationFragment;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -24,11 +25,14 @@ import timber.log.Timber;
  * This module provides all the network-related injections
  */
 @Module(
+        injects = {
+                StationFragment.class
+        },
         complete = false,
         library = true
 )
 public class NetModule {
-    public static final String PRODUCTION_API_URL = "http://ponyvillelive.com/api";
+    public static final String PRODUCTION_API_URL = "https://ponyvillelive.com/api";
     public static final int CACHE_SIZE = 50 * 1024 * 1024; // 50MB
 
     @Provides

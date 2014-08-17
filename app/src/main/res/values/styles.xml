@@ -18,7 +18,7 @@
     </style>
 
     <style name="AppTheme.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/AppColor</item>
+        <item name="android:background">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.ButtonOverflow" parent="android:style/Widget.Holo.ActionButton.Overflow">

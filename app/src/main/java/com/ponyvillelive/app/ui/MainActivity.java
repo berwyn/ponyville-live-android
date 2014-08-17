@@ -1,25 +1,38 @@
 package com.ponyvillelive.app.ui;
 
-import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.ponyvillelive.app.PvlApp;
 import com.ponyvillelive.app.R;
+import com.ponyvillelive.app.model.Station;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-public class MainActivity extends Activity {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import timber.log.Timber;
+
+public class MainActivity extends FragmentActivity {
 
     @Inject
     AppContainer appContainer;
+
+    @InjectView(R.id.pager)
+    ViewPager pager;
+    @InjectView(R.id.tabs)
+    PagerSlidingTabStrip tabStrip;
 
     private ViewGroup container;
 
@@ -30,14 +43,18 @@ public class MainActivity extends Activity {
         PvlApp app = PvlApp.get(this);
         app.inject(this);
 
-        container = appContainer.get(this, app);
-        getLayoutInflater().inflate(R.layout.activity_main, container);
+        long start = System.nanoTime();
 
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
+        container = appContainer.get(this, app);
+        View view = getLayoutInflater().inflate(R.layout.activity_main, container);
+
+        ButterKnife.inject(this, view);
+
+        long diff = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
+        Timber.d("Took %sms to inject activity", diff);
+
+        pager.setAdapter(new FragmentTabAdapter(getSupportFragmentManager()));
+        tabStrip.setViewPager(pager);
     }
 
 
@@ -60,19 +77,29 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
+    public class FragmentTabAdapter extends FragmentPagerAdapter {
+        private final FragmentManager fragmentManager;
+        private final String[] titles;
 
-        public PlaceholderFragment() {
+        public FragmentTabAdapter(FragmentManager manager) {
+            super(manager);
+            this.fragmentManager = manager;
+            titles = getResources().getStringArray(R.array.navItems);
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
+        public CharSequence getPageTitle(int position) {
+            return titles[position];
+        }
+
+        @Override
+        public int getCount() {
+            return titles.length;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return StationFragment.newInstance(Station.STATION_TYPE_AUDIO);
         }
     }
 }

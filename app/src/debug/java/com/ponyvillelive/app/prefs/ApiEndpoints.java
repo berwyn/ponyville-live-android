@@ -4,7 +4,7 @@ import com.ponyvillelive.app.net.NetModule;
 
 public enum ApiEndpoints {
     PRODUCTION("Production", NetModule.PRODUCTION_API_URL),
-    // STAGING("Staging", "https://api.staging.imgur.com/3/"),
+    STAGING("Staging", "https://ponyvillelive.apiary.io/api"),
     MOCK_MODE("Mock Mode", "mock://"),
     CUSTOM("Custom", null);
 

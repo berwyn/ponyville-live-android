@@ -22,6 +22,7 @@ import dagger.Provides;
  */
 @Module(
         injects = {
+                MainActivity.class,
                 DebugAppContainer.class
         },
         complete = false,
