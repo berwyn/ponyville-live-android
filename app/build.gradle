@@ -13,6 +13,15 @@ apply plugin: 'retrolambda'
 
 apply from: 'local.gradle'
 
+// Manifest version information!
+def versionMajor = 1
+def versionMinor = 0
+def versionPatch = 0
+def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+
+def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
+
 android {
     compileSdkVersion 20
     buildToolsVersion '20.0.0'
@@ -20,8 +29,12 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 20
-        versionCode 1
-        versionName "1.0"
+
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+
+        buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
+        buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
     }
 
     compileOptions {
@@ -34,7 +47,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
         debug {
-            packageNameSuffix '.debug'
+            applicationIdSuffix '.debug'
             versionNameSuffix '-DEBUG'
         }
     }
@@ -66,4 +79,5 @@ dependencies {
 
     debugCompile 'com.jakewharton.madge:madge:1.1.+'
     debugCompile 'com.jakewharton.scalpel:scalpel:1.1.+'
+    debugCompile 'com.squareup.retrofit:retrofit-mock:1.6.+'
 }

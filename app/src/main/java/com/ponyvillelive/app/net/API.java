@@ -16,6 +16,7 @@ import retrofit.converter.Converter;
 import retrofit.converter.GsonConverter;
 import retrofit.http.GET;
 import retrofit.http.Path;
+import rx.Observable;
 
 /**
  * <p>The code contract for the Ponyville Live! API as documented on
@@ -24,25 +25,25 @@ import retrofit.http.Path;
 public interface API {
 
     @GET("/station/list")
-    public void getStationList(Callback<StationResponse> callback);
+    public Observable<StationResponse> getStationList();
 
     @GET("/station/list/category/{category}")
-    public void getStationList(@Path("category")String category, Callback<StationResponse> callback);
+    public Observable<StationResponse> getStationList(@Path("category")String category);
 
     @GET("/nowplaying")
-    public void getNowPlaying(Callback<NowPlayingResponse> callback);
+    public Observable<NowPlayingResponse> getNowPlaying();
 
     @GET("/nowplaying/index/id/{id}")
-    public void getNowPlayingForStation(@Path("id")int id, Callback<NowPlayingStationResponse> callback);
+    public Observable<NowPlayingStationResponse> getNowPlayingForStation(@Path("id")int id);
 
     @GET("/show/latest")
-    public void getShows(Callback<ShowResponse> callback);
+    public Observable<ShowResponse> getShows();
 
     @GET("/show/index")
-    public void getAllShows(Callback<ShowResponse> callback);
+    public Observable<ShowResponse> getAllShows();
 
     @GET("/show/index/id/{id}")
-    public void getEpisodesForShow(@Path("id")String id, Callback<ShowResponse> callback);
+    public Observable<ShowResponse> getEpisodesForShow(@Path("id")String id);
 
     /**
      * <p>A builder class for {@link com.ponyvillelive.app.net.API}. A default builder will use

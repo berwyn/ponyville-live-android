@@ -1,6 +1,8 @@
 package com.ponyvillelive.app;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.ponyvillelive.app.net.NetModule;
 import com.ponyvillelive.app.ui.UiModule;
@@ -35,5 +37,10 @@ public class PvlModule {
     @Singleton
     Application provideApplication() {
         return app;
+    }
+
+    @Provides @Singleton
+    SharedPreferences provideSharedPreferences(Application app) {
+        return app.getSharedPreferences("u2020", Context.MODE_PRIVATE);
     }
 }

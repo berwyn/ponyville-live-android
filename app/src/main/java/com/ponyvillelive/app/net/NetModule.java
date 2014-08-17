@@ -14,13 +14,14 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import retrofit.Endpoint;
+import retrofit.Endpoints;
 import retrofit.RestAdapter;
 import retrofit.client.Client;
 import retrofit.client.OkClient;
 import timber.log.Timber;
 
 /**
- * Created by berwyn on 16/08/14.
+ * This module provides all the network-related injections
  */
 @Module(
         complete = false,
@@ -28,22 +29,12 @@ import timber.log.Timber;
 )
 public class NetModule {
     public static final String PRODUCTION_API_URL = "http://ponyvillelive.com/api";
-    private static final int CACHE_SIZE = 50 * 1024 * 1024; // 50MB
+    public static final int CACHE_SIZE = 50 * 1024 * 1024; // 50MB
 
     @Provides
     @Singleton
     Endpoint provideEndpoint() {
-        return new Endpoint() {
-            @Override
-            public String getUrl() {
-                return PRODUCTION_API_URL;
-            }
-
-            @Override
-            public String getName() {
-                return "Ponyville Live!";
-            }
-        };
+        return Endpoints.newFixedEndpoint(PRODUCTION_API_URL);
     }
 
     @Provides
@@ -73,7 +64,7 @@ public class NetModule {
         return restAdapter.create(API.class);
     }
 
-    static OkHttpClient createOkHttpClient(Application app) {
+    public static OkHttpClient createOkHttpClient(Application app) {
         OkHttpClient client = new OkHttpClient();
 
         // Install an HTTP cache in the application cache directory.

@@ -1,5 +1,6 @@
 package com.ponyvillelive.app;
 
+import com.ponyvillelive.app.net.DebugNetModule;
 import com.ponyvillelive.app.ui.DebugUiModule;
 
 import dagger.Module;
@@ -10,7 +11,8 @@ import dagger.Module;
 @Module(
         addsTo = PvlModule.class,
         includes = {
-                DebugUiModule.class
+                DebugUiModule.class,
+                DebugNetModule.class
         },
         overrides = true
 )
