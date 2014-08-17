@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.ponyvillelive.app.R;
 import com.ponyvillelive.app.model.Station;
@@ -43,9 +44,8 @@ public class StationAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView != null) {
-            return convertView;
-        }
-        return inflater.inflate(R.layout.fragment_station_list, null);
+        TextView tv = new TextView(inflater.getContext());
+        tv.setText(getItem(position).name);
+        return tv;
     }
 }

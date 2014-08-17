@@ -8,15 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.ponyvillelive.app.PvlApp;
 import com.ponyvillelive.app.R;
+import com.ponyvillelive.app.model.Station;
 import com.ponyvillelive.app.net.API;
-
-import java.util.Arrays;
-import java.util.Collections;
 
 import javax.inject.Inject;
 
@@ -68,7 +65,7 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            this.stationType = getArguments().getString(ARG_TYPE);
+            this.stationType = getArguments().getString(ARG_TYPE, "audio");
         }
         mAdapter = new StationAdapter(getLayoutInflater(savedInstanceState));
     }
@@ -91,6 +88,11 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+        if(this.stationType == null
+                && getArguments() != null) {
+            this.stationType = getArguments().getString(ARG_TYPE, Station.STATION_TYPE_AUDIO);
+        }
 
         PvlApp.get(activity).inject(this);
         api
