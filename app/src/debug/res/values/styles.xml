@@ -23,4 +23,12 @@
         <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
         <item name="android:textSize">16sp</item>
     </style>
+    <style name="Widget.Wallet.DebugDrawer.Spinner" parent="android:Widget.Holo.Spinner">
+        <item name="android:spinnerDropDownItemStyle">@style/Widget.Wallet.DebugDrawer.DropDownItem</item>
+        <item name="android:dropDownItemStyle">@style/Widget.Wallet.DebugDrawer.DropDownItem</item>
+        <item name="android:spinnerItemStyle">@style/Widget.Wallet.DebugDrawer.DropDownItem</item>
+    </style>
+    <style name="Widget.Wallet.DebugDrawer.DropDownItem" parent="android:Widget.Holo.DropDownItem">
+        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
+    </style>
 </resources>

@@ -71,19 +71,20 @@ public class MainActivity extends FragmentActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     public class FragmentTabAdapter extends FragmentPagerAdapter {
-        private final FragmentManager fragmentManager;
         private final String[] titles;
+        private final Fragment[] fragments = new Fragment[]{
+                StationFragment.newInstance(Station.STATION_TYPE_AUDIO),
+                StationFragment.newInstance(Station.STATION_TYPE_VIDEO),
+                new Fragment(),
+                new Fragment()
+        };
 
         public FragmentTabAdapter(FragmentManager manager) {
             super(manager);
-            this.fragmentManager = manager;
             titles = getResources().getStringArray(R.array.navItems);
         }
 
@@ -99,7 +100,7 @@ public class MainActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return StationFragment.newInstance(Station.STATION_TYPE_AUDIO);
+            return fragments[position];
         }
     }
 }

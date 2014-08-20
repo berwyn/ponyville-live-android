@@ -7,6 +7,7 @@
     android:layout_height="wrap_content"
     android:padding="12dp"
     android:columnCount="2"
+    android:theme="@android:style/Theme.Holo"
     tools:ignore="UselessParent">
     <LinearLayout
         android:layout_columnSpan="2"
@@ -57,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
-            style="@android:style/Widget.Holo.Spinner"/>
+            style="@style/Widget.Wallet.DebugDrawer.Spinner"/>
         <ImageButton
             android:id="@+id/debug_network_endpoint_edit"
             android:layout_height="wrap_content"
@@ -75,7 +76,7 @@
     <Spinner
         android:id="@+id/debug_network_delay"
         android:layout_gravity="start|end|center_vertical"
-        style="@android:style/Widget.Holo.Spinner"/>
+        style="@style/Widget.Wallet.DebugDrawer.Spinner"/>
 
     <TextView
         android:layout_gravity="start|end|center_vertical"
@@ -84,7 +85,7 @@
     <Spinner
         android:id="@+id/debug_network_variance"
         android:layout_gravity="start|end|center_vertical"
-        style="@android:style/Widget.Holo.Spinner"/>
+        style="@style/Widget.Wallet.DebugDrawer.Spinner"/>
 
     <TextView
         android:layout_gravity="start|end|center_vertical"
@@ -93,7 +94,7 @@
     <Spinner
         android:id="@+id/debug_network_error"
         android:layout_gravity="start|end|center_vertical"
-        style="@android:style/Widget.Holo.Spinner"/>
+        style="@style/Widget.Wallet.DebugDrawer.Spinner"/>
 
     <TextView
         android:layout_gravity="start|end|center_vertical"
@@ -102,7 +103,7 @@
     <Spinner
         android:id="@+id/debug_network_proxy"
         android:layout_gravity="start|end|center_vertical"
-        style="@android:style/Widget.Holo.Spinner"/>
+        style="@style/Widget.Wallet.DebugDrawer.Spinner"/>
 
     <TextView
         android:layout_gravity="start|end|center_vertical"
@@ -111,7 +112,7 @@
     <Spinner
         android:id="@+id/debug_network_logging"
         android:layout_gravity="start|end|center_vertical"
-        style="@android:style/Widget.Holo.Spinner"/>
+        style="@style/Widget.Wallet.DebugDrawer.Spinner"/>
 
     <!-- USER INTERFACE SECTION -->
 
@@ -128,7 +129,7 @@
     <Spinner
         android:id="@+id/debug_ui_animation_speed"
         android:layout_gravity="start|end|center_vertical"
-        style="@android:style/Widget.Holo.Spinner"/>
+        style="@style/Widget.Wallet.DebugDrawer.Spinner"/>
 
     <!--<TextView-->
         <!--android:layout_gravity="start|end|center_vertical"-->

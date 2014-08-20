@@ -3,6 +3,7 @@ package com.ponyvillelive.app.net;
 import android.app.Application;
 import android.net.http.HttpResponseCache;
 
+import com.ponyvillelive.app.ui.StationAdapter;
 import com.ponyvillelive.app.ui.StationFragment;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
@@ -26,7 +27,7 @@ import timber.log.Timber;
  */
 @Module(
         injects = {
-                StationFragment.class
+                StationAdapter.class
         },
         complete = false,
         library = true
