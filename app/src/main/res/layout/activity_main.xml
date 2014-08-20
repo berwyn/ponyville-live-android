@@ -36,15 +36,12 @@
         <!-- The second child of a SlidingUpPanel is the content that
              shows in the drawer, with a bit of margin based on the
              panelHeight variable -->
-        <FrameLayout
+        <fragment
+            android:id="@+id/bottom_drawer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-        <!--<fragment-->
-        <!--android:id="@+id/bottom_drawer"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:gravity="center|top"-->
-        <!--&lt;!&ndash;android:name="com.ponyvillelive.app.BaseActivity.java.BottomDrawerFragment"&ndash;&gt;-->
-        <!--tools:layout="@layout/fragment_bottom_drawer"/>-->
+            android:layout_height="match_parent"
+            android:gravity="center|top"
+            android:name="com.ponyvillelive.app.ui.BottomDrawerFragment"
+            tools:layout="@layout/fragment_bottom_drawer"/>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 </LinearLayout>

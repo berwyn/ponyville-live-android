@@ -15,6 +15,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.ponyvillelive.app.PvlApp;
 import com.ponyvillelive.app.R;
 import com.ponyvillelive.app.model.Station;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.concurrent.TimeUnit;
 
@@ -24,7 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import timber.log.Timber;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements StationFragment.StationFragmentListener {
 
     @Inject
     AppContainer appContainer;
@@ -33,8 +34,8 @@ public class MainActivity extends FragmentActivity {
     ViewPager pager;
     @InjectView(R.id.tabs)
     PagerSlidingTabStrip tabStrip;
-
-    private ViewGroup container;
+    @InjectView(R.id.view_slideup_panel)
+    SlidingUpPanelLayout slideUpPanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class MainActivity extends FragmentActivity {
 
         long start = System.nanoTime();
 
-        container = appContainer.get(this, app);
+        ViewGroup container = appContainer.get(this, app);
         View view = getLayoutInflater().inflate(R.layout.activity_main, container);
 
         ButterKnife.inject(this, view);
@@ -72,6 +73,13 @@ public class MainActivity extends FragmentActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void handleStationSelected(Station station) {
+        // TODO: Station was selected
+        // Inject it into the bottom drawer fragment
+        // Fire the intent for the music service to start playing
     }
 
     public class FragmentTabAdapter extends FragmentPagerAdapter {

@@ -32,7 +32,7 @@ import retrofit.RestAdapter;
 import retrofit.android.AndroidMockValuePersistence;
 
 /**
- * Created by berwyn on 16/08/14.
+ * Extends {@link com.ponyvillelive.app.net.NetModule} to provide extra debug features
  */
 @Module(
         addsTo = NetModule.class,
@@ -72,7 +72,15 @@ public class DebugNetModule {
         return mockRestAdapter;
     }
 
-
+    @Provides
+    @Singleton
+    API provideMockApi(RestAdapter restAdapter, MockRestAdapter mockRestAdapter,
+                       @IsMockMode boolean isMockMode, MockAPI mockService) {
+        if(isMockMode) {
+            return mockRestAdapter.create(API.class, mockService);
+        }
+        return restAdapter.create(API.class);
+    }
 
     @Provides
     @Singleton

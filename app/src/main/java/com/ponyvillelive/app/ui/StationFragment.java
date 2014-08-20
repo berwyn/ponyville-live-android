@@ -1,5 +1,6 @@
 package com.ponyvillelive.app.ui;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 
 import com.ponyvillelive.app.R;
+import com.ponyvillelive.app.model.Station;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -25,6 +27,8 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
 
     private static final String ARG_TYPE = "type";
     private String stationType;
+    private StationFragmentListener listener;
+    private StationAdapter adapter;
 
     @InjectView(android.R.id.list)
     AbsListView listView;
@@ -32,11 +36,14 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
     ImageView   emptyView;
 
     /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
+     * A basic {@link android.support.v4.app.Fragment} containing a {@link android.widget.AbsListView}
+     * of {@link com.ponyvillelive.app.model.Station}s
+     *
+     * @param stationType {@link com.ponyvillelive.app.model.Station#STATION_TYPE_AUDIO}
+     * or {@link com.ponyvillelive.app.model.Station#STATION_TYPE_VIDEO}
+     *
+     * @return A new {@link com.ponyvillelive.app.ui.StationFragment} instance
      */
-    private StationAdapter adapter;
-
     public static StationFragment newInstance(String stationType) {
         StationFragment fragment = new StationFragment();
         Bundle args = new Bundle();
@@ -77,8 +84,37 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // TODO: Handle list/grid click
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if(!(activity instanceof StationFragmentListener)) {
+            throw new RuntimeException("Activities must implement StationFragmentListener");
+        } else {
+            listener = (StationFragmentListener) activity;
+        }
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if(listener != null) {
+            listener.handleStationSelected(adapter.getItem(position));
+        }
+    }
+
+    /**
+     * The interaction contract that all {@link android.app.Activity}s embedding a
+     * {@link com.ponyvillelive.app.ui.StationFragment} must implement
+     */
+    public interface StationFragmentListener {
+        /**
+         * Handle a station being selected inside of the {@link com.ponyvillelive.app.ui.StationFragment}
+         * @param station The {@link com.ponyvillelive.app.model.Station} that was selected
+         */
+        public void handleStationSelected(Station station);
+    }
 }

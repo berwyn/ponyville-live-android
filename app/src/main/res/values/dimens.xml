@@ -7,6 +7,6 @@
          https://developer.android.com/design/patterns/navigation-drawer.html -->
     <dimen name="navigation_drawer_width">240dp</dimen>
 
-    <dimen name="bottom_drawer_peek_height">68dp</dimen>
+    <dimen name="bottom_drawer_peek_height">64dp</dimen>
     <dimen name="icon_size">64dp</dimen>
 </resources>
