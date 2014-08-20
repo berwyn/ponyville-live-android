@@ -3,6 +3,7 @@ package com.ponyvillelive.app.net;
 import android.app.Application;
 import android.net.http.HttpResponseCache;
 
+import com.ponyvillelive.app.BuildConfig;
 import com.ponyvillelive.app.ui.StationAdapter;
 import com.ponyvillelive.app.ui.StationFragment;
 import com.squareup.okhttp.Cache;
@@ -60,6 +61,8 @@ public class NetModule {
         return new RestAdapter.Builder()
                 .setClient(client)
                 .setEndpoint(endpoint)
+                .setRequestInterceptor((requestFacade) ->
+                        requestFacade.addHeader("User-Agent", BuildConfig.PACKAGE_NAME + "/" + BuildConfig.VERSION_NAME))
                 .build();
     }
 
