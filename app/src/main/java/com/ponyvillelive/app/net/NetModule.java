@@ -4,10 +4,13 @@ import android.app.Application;
 import android.net.http.HttpResponseCache;
 
 import com.ponyvillelive.app.BuildConfig;
+import com.ponyvillelive.app.ui.BottomDrawerFragment;
 import com.ponyvillelive.app.ui.StationAdapter;
 import com.ponyvillelive.app.ui.StationFragment;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.picasso.OkHttpDownloader;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +31,8 @@ import timber.log.Timber;
  */
 @Module(
         injects = {
-                StationAdapter.class
+                StationAdapter.class,
+                BottomDrawerFragment.class
         },
         complete = false,
         library = true
@@ -70,6 +74,14 @@ public class NetModule {
     @Singleton
     API provideAPI(RestAdapter restAdapter) {
         return restAdapter.create(API.class);
+    }
+
+    @Provides
+    @Singleton
+    Picasso providePicasso(Application app, OkHttpClient client) {
+        Picasso.Builder builder = new Picasso.Builder(app);
+        builder.downloader(new OkHttpDownloader(client));
+        return builder.build();
     }
 
     public static OkHttpClient createOkHttpClient(Application app) {

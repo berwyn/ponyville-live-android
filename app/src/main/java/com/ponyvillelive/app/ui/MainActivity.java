@@ -23,23 +23,30 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import icepick.Icepick;
 import timber.log.Timber;
 
 public class MainActivity extends FragmentActivity implements StationFragment.StationFragmentListener {
+
+    private static final String BUNDLE_KEY_STATION = "bundle_key_station";
 
     @Inject
     AppContainer appContainer;
 
     @InjectView(R.id.pager)
-    ViewPager pager;
+    ViewPager            pager;
     @InjectView(R.id.tabs)
     PagerSlidingTabStrip tabStrip;
     @InjectView(R.id.view_slideup_panel)
     SlidingUpPanelLayout slideUpPanel;
 
+    private Station station;
+    private BottomDrawerFragment bottomDrawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Icepick.restoreInstanceState(this, savedInstanceState);
 
         PvlApp app = PvlApp.get(this);
         app.inject(this);
@@ -54,8 +61,16 @@ public class MainActivity extends FragmentActivity implements StationFragment.St
         long diff = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
         Timber.d("Took %sms to inject activity", diff);
 
+        bottomDrawer = (BottomDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.bottom_drawer);
         pager.setAdapter(new FragmentTabAdapter(getSupportFragmentManager()));
         tabStrip.setViewPager(pager);
+        slideUpPanel.hidePanel();
+        slideUpPanel.setPanelSlideListener(new ActionbarHideSlidePanelListener(this));
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(BUNDLE_KEY_STATION)) {
+            station = savedInstanceState.getParcelable(BUNDLE_KEY_STATION);
+            handleStationSelected(station);
+        }
     }
 
 
@@ -64,6 +79,15 @@ public class MainActivity extends FragmentActivity implements StationFragment.St
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
+        if(station != null) {
+            outState.putParcelable(BUNDLE_KEY_STATION, station);
+        }
     }
 
     @Override
@@ -77,18 +101,20 @@ public class MainActivity extends FragmentActivity implements StationFragment.St
 
     @Override
     public void handleStationSelected(Station station) {
-        // TODO: Station was selected
-        // Inject it into the bottom drawer fragment
-        // Fire the intent for the music service to start playing
+        this.station = station;
+        bottomDrawer.showStationInfo(station);
+        if(slideUpPanel.isPanelHidden()) {
+            slideUpPanel.showPanel();
+        }
+        // TODO: Fire intent for media server
     }
 
     public class FragmentTabAdapter extends FragmentPagerAdapter {
         private final String[] titles;
+        // Removing Fragments until the actual fragment is ready
         private final Fragment[] fragments = new Fragment[]{
                 StationFragment.newInstance(Station.STATION_TYPE_AUDIO),
-                StationFragment.newInstance(Station.STATION_TYPE_VIDEO),
-                new Fragment(),
-                new Fragment()
+                // StationFragment.newInstance(Station.STATION_TYPE_VIDEO),
         };
 
         public FragmentTabAdapter(FragmentManager manager) {
@@ -103,7 +129,7 @@ public class MainActivity extends FragmentActivity implements StationFragment.St
 
         @Override
         public int getCount() {
-            return titles.length;
+            return fragments.length;
         }
 
         @Override

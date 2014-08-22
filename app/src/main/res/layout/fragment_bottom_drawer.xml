@@ -3,9 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:visibility="gone"
-              tools:context="com.ponyvillelive.app.ui.BottomDrawerFragment"
-              tools:visibility="visible">
+              tools:context="com.ponyvillelive.app.ui.BottomDrawerFragment" >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_drawer_peek_height"
@@ -26,7 +24,7 @@
             android:padding="8dp"
             android:orientation="vertical">
             <TextView
-                android:id="@+id/text_station_name"
+                android:id="@+id/text_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@android:style/TextAppearance.Holo.Large"
@@ -34,7 +32,7 @@
                 android:maxLines="1"
                 tools:text="Petrified feat. Mic the Microphone" />
             <TextView
-                android:id="@+id/text_station_description"
+                android:id="@+id/text_artist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@android:style/TextAppearance.Holo.Small"

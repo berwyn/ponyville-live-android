@@ -1,25 +1,48 @@
 package com.ponyvillelive.app.ui;
 
-import android.app.Fragment;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ponyvillelive.app.PvlApp;
 import com.ponyvillelive.app.R;
+import com.ponyvillelive.app.model.NowPlayingMeta;
 import com.ponyvillelive.app.model.Station;
+import com.ponyvillelive.app.net.API;
+import com.squareup.picasso.Picasso;
+
+import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link BottomDrawerFragment#newInstance} factory method to
  * create an instance of this fragment.
- *
  */
 public class BottomDrawerFragment extends Fragment {
-    private Station station;
+
+    @InjectView(R.id.icon)
+    ImageView icon;
+    @InjectView(R.id.text_title)
+    TextView  title;
+    @InjectView(R.id.text_artist)
+    TextView  artist;
+
+    @Inject
+    Picasso picasso;
+    @Inject
+    API     api;
 
     /**
      * Use this factory method to create a new instance of
@@ -47,20 +70,40 @@ public class BottomDrawerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bottom_drawer, container, false);
+        View v = inflater.inflate(R.layout.fragment_bottom_drawer, container, false);
+        ButterKnife.inject(this, v);
+        return v;
     }
 
-    public void setStation(Station station) {
-        this.station = station;
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        PvlApp.get(activity).inject(this);
     }
 
-    private void updateView(ViewHolder vh) {
+    /**
+     * Binds the view to the current station, displaying it's data in
+     * the peek area, as well as its track history in the list
+     * @param station The {@link com.ponyvillelive.app.model.Station} to bind to
+     */
+    public void showStationInfo(Station station) {
+        api
+                .getNowPlayingForStation(station.id)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((nowPlayingStationResponse) -> {
+                    if(getView() == null) return;
 
-    }
+                    if(getView().getVisibility() != View.VISIBLE) {
+                        getView().setVisibility(View.VISIBLE);
+                    }
 
-    public class ViewHolder {
-        ImageView albumArt;
-        TextView songName;
-        TextView artistName;
+                    NowPlayingMeta data = nowPlayingStationResponse.result;
+                    title.setText(data.currentSong.title);
+                    artist.setText(data.currentSong.artist);
+                    picasso
+                            .load("http:" + data.station.imageUrl)
+                            .into(icon);
+                });
     }
 }
