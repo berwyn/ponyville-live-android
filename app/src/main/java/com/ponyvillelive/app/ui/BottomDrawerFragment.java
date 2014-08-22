@@ -21,6 +21,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -43,6 +44,8 @@ public class BottomDrawerFragment extends Fragment {
     Picasso picasso;
     @Inject
     API     api;
+
+    private DrawerListener listener;
 
     /**
      * Use this factory method to create a new instance of
@@ -78,7 +81,24 @@ public class BottomDrawerFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+        if(!(activity instanceof DrawerListener)) {
+            throw new RuntimeException("Activity must implement DrawerListener");
+        }
+
+        this.listener = (DrawerListener) activity;
         PvlApp.get(activity).inject(this);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.listener = null;
+    }
+
+    @OnClick(R.id.btn_drawer_cancel)
+    public void handleStopClicked() {
+        listener.handleStationCleared();
     }
 
     /**
@@ -105,5 +125,9 @@ public class BottomDrawerFragment extends Fragment {
                             .load("http:" + data.station.imageUrl)
                             .into(icon);
                 });
+    }
+
+    public interface DrawerListener {
+        public void handleStationCleared();
     }
 }

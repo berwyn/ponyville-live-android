@@ -26,7 +26,9 @@ import butterknife.InjectView;
 import icepick.Icepick;
 import timber.log.Timber;
 
-public class MainActivity extends FragmentActivity implements StationFragment.StationFragmentListener {
+public class MainActivity extends FragmentActivity implements
+        StationFragment.StationFragmentListener,
+        BottomDrawerFragment.DrawerListener {
 
     private static final String BUNDLE_KEY_STATION = "bundle_key_station";
 
@@ -39,6 +41,8 @@ public class MainActivity extends FragmentActivity implements StationFragment.St
     PagerSlidingTabStrip tabStrip;
     @InjectView(R.id.view_slideup_panel)
     SlidingUpPanelLayout slideUpPanel;
+    @InjectView(R.id.drawer_metadata)
+    View drawerHandle;
 
     private Station station;
     private BottomDrawerFragment bottomDrawer;
@@ -64,6 +68,7 @@ public class MainActivity extends FragmentActivity implements StationFragment.St
         bottomDrawer = (BottomDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.bottom_drawer);
         pager.setAdapter(new FragmentTabAdapter(getSupportFragmentManager()));
         tabStrip.setViewPager(pager);
+        slideUpPanel.setDragView(drawerHandle);
         slideUpPanel.hidePanel();
         slideUpPanel.setPanelSlideListener(new ActionbarHideSlidePanelListener(this));
 
@@ -107,6 +112,14 @@ public class MainActivity extends FragmentActivity implements StationFragment.St
             slideUpPanel.showPanel();
         }
         // TODO: Fire intent for media server
+    }
+
+    @Override
+    public void handleStationCleared() {
+        this.station = null;
+        if(!slideUpPanel.isPanelHidden()) {
+            slideUpPanel.hidePanel();
+        }
     }
 
     public class FragmentTabAdapter extends FragmentPagerAdapter {
