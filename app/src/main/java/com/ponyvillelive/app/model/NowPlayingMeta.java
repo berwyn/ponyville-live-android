@@ -15,6 +15,6 @@ public class NowPlayingMeta {
     @SerializedName("current_song")
     public Song currentSong;
     @SerializedName("song_history")
-    public List<Song> songHistory;
+    public List<SongWrapper> songHistory;
 
 }

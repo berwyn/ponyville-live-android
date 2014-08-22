@@ -8,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ponyvillelive.app.PvlApp;
 import com.ponyvillelive.app.R;
 import com.ponyvillelive.app.model.NowPlayingMeta;
+import com.ponyvillelive.app.model.Song;
 import com.ponyvillelive.app.model.Station;
 import com.ponyvillelive.app.net.API;
 import com.squareup.picasso.Picasso;
@@ -39,12 +41,15 @@ public class BottomDrawerFragment extends Fragment {
     TextView  title;
     @InjectView(R.id.text_artist)
     TextView  artist;
+    @InjectView(R.id.bottom_drawer_list)
+    ListView trackList;
 
     @Inject
     Picasso picasso;
     @Inject
     API     api;
 
+    private TrackListAdapter adapter;
     private DrawerListener listener;
 
     /**
@@ -70,11 +75,15 @@ public class BottomDrawerFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_bottom_drawer, container, false);
         ButterKnife.inject(this, v);
+
+        adapter = new TrackListAdapter();
+        trackList.setAdapter(adapter);
+
         return v;
     }
 
@@ -124,6 +133,7 @@ public class BottomDrawerFragment extends Fragment {
                     picasso
                             .load("http:" + data.station.imageUrl)
                             .into(icon);
+                    adapter.setSongs(data.songHistory);
                 });
     }
 
