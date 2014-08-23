@@ -6,7 +6,9 @@ import android.view.View;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 /**
- * Created by berwyn on 21/08/14.
+ * An implementation of {@link com.sothree.slidinguppanel.SlidingUpPanelLayout.SimplePanelSlideListener}
+ * that hides the {@link android.app.ActionBar} when the panel is slid open, and reveals it again
+ * when the panel is slid closed or hidden
  */
 public class ActionbarHideSlidePanelListener extends SlidingUpPanelLayout.SimplePanelSlideListener {
 

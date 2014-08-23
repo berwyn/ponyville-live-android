@@ -127,7 +127,7 @@ public class MainActivity extends FragmentActivity implements
         // Removing Fragments until the actual fragment is ready
         private final Fragment[] fragments = new Fragment[]{
                 StationFragment.newInstance(Station.STATION_TYPE_AUDIO),
-                // StationFragment.newInstance(Station.STATION_TYPE_VIDEO),
+                StationFragment.newInstance(Station.STATION_TYPE_VIDEO),
         };
 
         public FragmentTabAdapter(FragmentManager manager) {

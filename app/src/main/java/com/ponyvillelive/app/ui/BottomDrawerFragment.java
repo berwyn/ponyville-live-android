@@ -1,7 +1,6 @@
 package com.ponyvillelive.app.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import com.ponyvillelive.app.PvlApp;
 import com.ponyvillelive.app.R;
 import com.ponyvillelive.app.model.NowPlayingMeta;
-import com.ponyvillelive.app.model.Song;
 import com.ponyvillelive.app.model.Station;
 import com.ponyvillelive.app.net.API;
 import com.squareup.picasso.Picasso;

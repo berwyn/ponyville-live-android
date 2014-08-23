@@ -10,7 +10,6 @@ import com.ponyvillelive.app.R;
 import com.ponyvillelive.app.model.Song;
 import com.ponyvillelive.app.model.SongWrapper;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,6 +34,7 @@ public class TrackListAdapter extends BaseAdapter {
 
     public void addSongs(List<SongWrapper> songs) {
         this.songs.addAll(songs);
+        notifyDataSetChanged();
     }
 
     @Override
