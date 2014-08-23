@@ -29,4 +29,12 @@ public class ActionbarHideSlidePanelListener extends SlidingUpPanelLayout.Simple
             activity.getActionBar().hide();
         }
     }
+
+    @Override
+    public void onPanelHidden(View panel) {
+        super.onPanelHidden(panel);
+        if(!activity.getActionBar().isShowing()) {
+            activity.getActionBar().show();
+        }
+    }
 }
