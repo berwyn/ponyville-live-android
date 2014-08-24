@@ -8,6 +8,7 @@
         <item name="android:actionBarStyle">@style/AppTheme.ActionBar</item>
         <item name="android:actionOverflowButtonStyle">@style/AppTheme.ButtonOverflow</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowActionBarOverlay">true</item>
     </style>
 
     <style name="AppTheme.StationIcon">

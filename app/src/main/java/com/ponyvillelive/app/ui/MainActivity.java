@@ -44,6 +44,7 @@ public class MainActivity extends FragmentActivity implements
     @InjectView(R.id.drawer_metadata)
     View drawerHandle;
 
+    private boolean tester = false;
     private Station station;
     private BottomDrawerFragment bottomDrawer;
 
@@ -101,15 +102,32 @@ public class MainActivity extends FragmentActivity implements
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_tester:
+                tester = !tester;
+                item.setChecked(tester);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
     public void handleStationSelected(Station station) {
         this.station = station;
         bottomDrawer.showStationInfo(station);
-        if(slideUpPanel.isPanelHidden()) {
-            slideUpPanel.showPanel();
+        if(tester) {
+            if(slideUpPanel.isPanelHidden()) {
+                slideUpPanel.showPanel();
+            }
+            slideUpPanel.expandPanel();
+        } else {
+            if(slideUpPanel.isPanelHidden()) {
+                slideUpPanel.showPanel();
+                slideUpPanel.expandPanel();
+            }
         }
         // TODO: Fire intent for media server
     }

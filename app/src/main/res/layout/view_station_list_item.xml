@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="horizontal" >
+              android:background="@drawable/card_background"
+              android:minHeight="100dp"
+              android:orientation="horizontal">
     <ImageView
         android:id="@+id/station_icon"
         android:layout_width="64dp"
@@ -15,7 +16,10 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="top"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
         android:orientation="vertical" >
         <TextView
             android:id="@+id/station_name"
@@ -28,6 +32,19 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@android:style/TextAppearance.Holo.Small"
+            android:textColor="@android:color/darker_gray"
             tools:text="All pony, all the time"/>
+        <TextView
+            android:id="@+id/station_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.Holo.Small"
+            tools:text="Pieces of Me feat. Pencil Eraser"/>
+        <TextView
+            android:id="@+id/station_artist"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.Holo.Small"
+            tools:text="Canapplejack"/>
         </LinearLayout>
 </LinearLayout>
