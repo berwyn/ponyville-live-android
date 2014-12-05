@@ -6,22 +6,23 @@
     android:background="#F0F0F0"
     tools:context="com.ponyvillelive.app.ui.StationFragment">
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="8dp"
+        android:scrollbars="vertical"
         android:scrollbarStyle="outsideOverlay"
         android:divider="@android:color/transparent"
         android:dividerHeight="10.0sp"
         android:clipToPadding="false"/>
 
-    <ImageView
-        android:id="@android:id/empty"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:src="@drawable/ic_launcher"/>
+    <!--<ImageView-->
+        <!--android:id="@android:id/empty"-->
+        <!--android:layout_width="128dp"-->
+        <!--android:layout_height="128dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:gravity="center"-->
+        <!--android:src="@drawable/ic_launcher"/>-->
 
 </FrameLayout>

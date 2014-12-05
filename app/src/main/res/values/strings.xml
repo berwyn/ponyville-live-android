@@ -19,6 +19,7 @@
     <string name="accessibility_station_icon">Station icon</string>
     <string name="action_cast">Cast</string>
     <string name="text_action_change_stream">Change stream</string>
+    <string name="content_description_station_logo">Station logo</string>
 
     <string-array name="navItems">
         <item>Radio</item>

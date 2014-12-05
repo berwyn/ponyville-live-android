@@ -1,58 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@drawable/card_background"
-              android:minHeight="100dp"
-              android:orientation="horizontal">
-    <ImageView
-        android:id="@+id/station_icon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:padding="8dp"
-        android:scaleType="centerInside"
-        tools:src="@drawable/ic_launcher" />
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true"
+    app:cardPreventCornerOverlap="true"
+    app:cardCornerRadius="2dp">
+
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_weight="1"
-        android:orientation="vertical" >
-        <TextView
-            android:id="@+id/station_name"
-            android:layout_width="fill_parent"
+        android:minHeight="100dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/station_icon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:padding="8dp"
+            android:scaleType="centerInside"
+            tools:src="@drawable/ic_launcher"
+            android:contentDescription="@string/content_description_station_logo" />
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textAppearance="@android:style/TextAppearance.Holo.Large"
-            tools:text="Celestia Radio"/>
-        <TextView
-            android:id="@+id/station_genre"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@android:style/TextAppearance.Holo.Small"
-            android:textColor="@android:color/darker_gray"
-            tools:text="All pony, all the time"/>
-        <TextView
-            android:id="@+id/station_title"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@android:style/TextAppearance.Holo.Small"
-            tools:text="Pieces of Me feat. Pencil Eraser"/>
-        <TextView
-            android:id="@+id/station_artist"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@android:style/TextAppearance.Holo.Small"
-            tools:text="Canapplejack"/>
+            android:layout_gravity="top"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/station_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.Holo.Large"
+                tools:text="Celestia Radio" />
+
+            <TextView
+                android:id="@+id/station_genre"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.Holo.Small"
+                android:textColor="@android:color/darker_gray"
+                tools:text="All pony, all the time" />
+
+            <TextView
+                android:id="@+id/station_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.Holo.Small"
+                tools:text="Pieces of Me feat. Pencil Eraser" />
+
+            <TextView
+                android:id="@+id/station_artist"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.Holo.Small"
+                tools:text="Canapplejack" />
         </LinearLayout>
-    <ImageButton
-        android:id="@+id/station_menu"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_action_overflow"
-        android:tint="#FF999999"/>
-</LinearLayout>
+
+        <ImageButton
+            android:id="@+id/station_menu"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_action_overflow"
+            android:tint="#FF999999" />
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>
