@@ -10,26 +10,7 @@
     app:shadowHeight="4dp">
     <!-- As the main content view, the view below consumes the entire
          space available using match_parent in both dimensions. -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="?android:attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:orientation="vertical">
-        <com.astuetz.PagerSlidingTabStrip
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="48dip"
-            android:background="@color/colorPrimary"
-            android:textColor="@android:color/white"
-            app:pstsIndicatorColor="@android:color/white"
-            app:pstsDividerColor="@android:color/transparent"/>
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            tools:context=".ui.MainActivityRedux" />
-    </LinearLayout>
+    <include layout="@layout/view_activity_header" />
     <!-- The second child of a SlidingUpPanel is the content that
          shows in the drawer, with a bit of margin based on the
          panelHeight variable -->

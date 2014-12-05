@@ -104,9 +104,9 @@ public class DebugAppContainer implements AppContainer {
     @InjectView(R.id.debug_content)
     ViewGroup    content;
 
-//    @InjectView(R.id.madge_container)
-//    MadgeFrameLayout   madgeFrameLayout;
-    @InjectView(R.id.debug_content)
+    @InjectView(R.id.madge_container)
+    MadgeFrameLayout   madgeFrameLayout;
+    @InjectView(R.id.scalpel_container)
     ScalpelFrameLayout scalpelFrameLayout;
 
     @InjectView(R.id.debug_network_endpoint)
@@ -126,10 +126,10 @@ public class DebugAppContainer implements AppContainer {
 
     @InjectView(R.id.debug_ui_animation_speed)
     Spinner uiAnimationSpeedView;
-//    @InjectView(R.id.debug_ui_pixel_grid)
-//    Switch  uiPixelGridView;
-//    @InjectView(R.id.debug_ui_pixel_ratio)
-//    Switch  uiPixelRatioView;
+    @InjectView(R.id.debug_ui_pixel_grid)
+    Switch  uiPixelGridView;
+    @InjectView(R.id.debug_ui_pixel_ratio)
+    Switch  uiPixelRatioView;
     @InjectView(R.id.debug_ui_scalpel)
     Switch  uiScalpelView;
     @InjectView(R.id.debug_ui_scalpel_wireframe)
@@ -240,11 +240,9 @@ public class DebugAppContainer implements AppContainer {
 
         // If you have not seen the debug drawer before, show it with a message
         if (!seenDebugDrawer.get()) {
-            drawerLayout.postDelayed(new Runnable() {
-                @Override public void run() {
-                    drawerLayout.openDrawer(Gravity.END);
-                    Toast.makeText(activity, R.string.debug_drawer_welcome, Toast.LENGTH_LONG).show();
-                }
+            drawerLayout.postDelayed(() -> {
+                drawerLayout.openDrawer(Gravity.END);
+                Toast.makeText(activity, R.string.debug_drawer_welcome, Toast.LENGTH_LONG).show();
             }, 1000);
             seenDebugDrawer.set(true);
         }
@@ -442,58 +440,46 @@ public class DebugAppContainer implements AppContainer {
             }
         });
         // Ensure the animation speed value is always applied across app restarts.
-        content.post(new Runnable() {
-            @Override public void run() {
-                applyAnimationSpeed(animationSpeedValue);
-            }
+        content.post(() -> applyAnimationSpeed(animationSpeedValue));
+
+        boolean gridEnabled = pixelGridEnabled.get();
+        madgeFrameLayout.setOverlayEnabled(gridEnabled);
+        uiPixelGridView.setChecked(gridEnabled);
+        uiPixelRatioView.setEnabled(gridEnabled);
+        uiPixelGridView.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Timber.d("Setting pixel grid overlay enabled to " + isChecked);
+            pixelGridEnabled.set(isChecked);
+            madgeFrameLayout.setOverlayEnabled(isChecked);
+            uiPixelRatioView.setEnabled(isChecked);
         });
 
-//        boolean gridEnabled = pixelGridEnabled.get();
-//        madgeFrameLayout.setOverlayEnabled(gridEnabled);
-//        uiPixelGridView.setChecked(gridEnabled);
-//        uiPixelRatioView.setEnabled(gridEnabled);
-//        uiPixelGridView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                Timber.d("Setting pixel grid overlay enabled to " + isChecked);
-//                pixelGridEnabled.set(isChecked);
-//                madgeFrameLayout.setOverlayEnabled(isChecked);
-//                uiPixelRatioView.setEnabled(isChecked);
-//            }
-//        });
-//
-//        boolean ratioEnabled = pixelRatioEnabled.get();
-//        madgeFrameLayout.setOverlayRatioEnabled(ratioEnabled);
-//        uiPixelRatioView.setChecked(ratioEnabled);
-//        uiPixelRatioView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                Timber.d("Setting pixel scale overlay enabled to " + isChecked);
-//                pixelRatioEnabled.set(isChecked);
-//                madgeFrameLayout.setOverlayRatioEnabled(isChecked);
-//            }
-//        });
+        boolean ratioEnabled = pixelRatioEnabled.get();
+        madgeFrameLayout.setOverlayRatioEnabled(ratioEnabled);
+        uiPixelRatioView.setChecked(ratioEnabled);
+        uiPixelRatioView.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Timber.d("Setting pixel scale overlay enabled to " + isChecked);
+            pixelRatioEnabled.set(isChecked);
+            madgeFrameLayout.setOverlayRatioEnabled(isChecked);
+        });
 
         boolean scalpel = scalpelEnabled.get();
         scalpelFrameLayout.setLayerInteractionEnabled(scalpel);
         uiScalpelView.setChecked(scalpel);
         uiScalpelWireframeView.setEnabled(scalpel);
-        uiScalpelView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Timber.d("Setting scalpel interaction enabled to " + isChecked);
-                scalpelEnabled.set(isChecked);
-                scalpelFrameLayout.setLayerInteractionEnabled(isChecked);
-                uiScalpelWireframeView.setEnabled(isChecked);
-            }
+        uiScalpelView.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Timber.d("Setting scalpel interaction enabled to " + isChecked);
+            scalpelEnabled.set(isChecked);
+            scalpelFrameLayout.setLayerInteractionEnabled(isChecked);
+            uiScalpelWireframeView.setEnabled(isChecked);
         });
 
         boolean wireframe = scalpelWireframeEnabled.get();
         scalpelFrameLayout.setDrawViews(!wireframe);
         uiScalpelWireframeView.setChecked(wireframe);
-        uiScalpelWireframeView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Timber.d("Setting scalpel wireframe enabled to " + isChecked);
-                scalpelWireframeEnabled.set(isChecked);
-                scalpelFrameLayout.setDrawViews(!isChecked);
-            }
+        uiScalpelWireframeView.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Timber.d("Setting scalpel wireframe enabled to " + isChecked);
+            scalpelWireframeEnabled.set(isChecked);
+            scalpelFrameLayout.setDrawViews(!isChecked);
         });
     }
 
@@ -528,12 +514,10 @@ public class DebugAppContainer implements AppContainer {
         boolean picassoDebuggingValue = picassoDebugging.get();
         picasso.setDebugging(picassoDebuggingValue);
         picassoIndicatorView.setChecked(picassoDebuggingValue);
-        picassoIndicatorView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton button, boolean isChecked) {
-                Timber.d("Setting Picasso debugging to " + isChecked);
-                picasso.setDebugging(isChecked);
-                picassoDebugging.set(isChecked);
-            }
+        picassoIndicatorView.setOnCheckedChangeListener((button, isChecked) -> {
+            Timber.d("Setting Picasso debugging to " + isChecked);
+            picasso.setDebugging(isChecked);
+            picassoDebugging.set(isChecked);
         });
 
         refreshPicassoStats();
@@ -604,35 +588,27 @@ public class DebugAppContainer implements AppContainer {
         new AlertDialog.Builder(activity) //
                 .setTitle("Set Network Proxy")
                 .setView(view)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override public void onClick(DialogInterface dialog, int i) {
-                        networkProxyView.setSelection(originalSelection);
-                        dialog.cancel();
-                    }
+                .setNegativeButton("Cancel", (dialog, i) -> {
+                    networkProxyView.setSelection(originalSelection);
+                    dialog.cancel();
                 })
-                .setPositiveButton("Use", new DialogInterface.OnClickListener() {
-                    @Override public void onClick(DialogInterface dialog, int i) {
-                        String theHost = host.getText().toString();
-                        if (!Strings.isBlank(theHost)) {
-                            String[] parts = theHost.split(":", 2);
-                            SocketAddress address =
-                                    InetSocketAddress.createUnresolved(parts[0], Integer.parseInt(parts[1]));
+                .setPositiveButton("Use", (dialog, i) -> {
+                    String theHost = host.getText().toString();
+                    if (!Strings.isBlank(theHost)) {
+                        String[] parts = theHost.split(":", 2);
+                        SocketAddress address =
+                                InetSocketAddress.createUnresolved(parts[0], Integer.parseInt(parts[1]));
 
-                            networkProxy.set(theHost); // Persist across restarts.
-                            proxyAdapter.notifyDataSetChanged(); // Tell the spinner to update.
-                            networkProxyView.setSelection(ProxyAdapter.PROXY); // And show the proxy.
+                        networkProxy.set(theHost); // Persist across restarts.
+                        proxyAdapter.notifyDataSetChanged(); // Tell the spinner to update.
+                        networkProxyView.setSelection(ProxyAdapter.PROXY); // And show the proxy.
 
-                            client.setProxy(new Proxy(HTTP, address));
-                        } else {
-                            networkProxyView.setSelection(originalSelection);
-                        }
-                    }
-                })
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override public void onCancel(DialogInterface dialogInterface) {
+                        client.setProxy(new Proxy(HTTP, address));
+                    } else {
                         networkProxyView.setSelection(originalSelection);
                     }
                 })
+                .setOnCancelListener(dialogInterface -> networkProxyView.setSelection(originalSelection))
                 .show();
     }
 
@@ -645,27 +621,19 @@ public class DebugAppContainer implements AppContainer {
         new AlertDialog.Builder(activity) //
                 .setTitle("Set Network Endpoint")
                 .setView(view)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override public void onClick(DialogInterface dialog, int i) {
-                        endpointView.setSelection(originalSelection);
-                        dialog.cancel();
-                    }
+                .setNegativeButton("Cancel", (dialog, i) -> {
+                    endpointView.setSelection(originalSelection);
+                    dialog.cancel();
                 })
-                .setPositiveButton("Use", new DialogInterface.OnClickListener() {
-                    @Override public void onClick(DialogInterface dialog, int i) {
-                        String theUrl = url.getText().toString();
-                        if (!Strings.isBlank(theUrl)) {
-                            setEndpointAndRelaunch(theUrl);
-                        } else {
-                            endpointView.setSelection(originalSelection);
-                        }
-                    }
-                })
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override public void onCancel(DialogInterface dialogInterface) {
+                .setPositiveButton("Use", (dialog, i) -> {
+                    String theUrl = url.getText().toString();
+                    if (!Strings.isBlank(theUrl)) {
+                        setEndpointAndRelaunch(theUrl);
+                    } else {
                         endpointView.setSelection(originalSelection);
                     }
                 })
+                .setOnCancelListener(dialogInterface -> endpointView.setSelection(originalSelection))
                 .show();
     }
 

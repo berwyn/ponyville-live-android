@@ -1,14 +1,14 @@
 package com.ponyvillelive.app.net;
 
 import com.google.gson.Gson;
-import com.ponyvillelive.app.BuildConfig;
-import com.ponyvillelive.app.model.NowPlayingResponse;
-import com.ponyvillelive.app.model.NowPlayingStationResponse;
-import com.ponyvillelive.app.model.ShowResponse;
-import com.ponyvillelive.app.model.StationMetaResponse;
-import com.ponyvillelive.app.model.StationResponse;
+import com.ponyvillelive.app.model.ArrayResponse;
+import com.ponyvillelive.app.model.MapResponse;
+import com.ponyvillelive.app.model.NowPlayingMeta;
+import com.ponyvillelive.app.model.ObjectResponse;
+import com.ponyvillelive.app.model.Show;
+import com.ponyvillelive.app.model.Station;
+import com.ponyvillelive.app.model.StationMeta;
 
-import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.client.Client;
 import retrofit.client.OkClient;
@@ -24,26 +24,26 @@ import rx.Observable;
  */
 public interface API {
 
-    @GET("/station/list")
-    public Observable<StationResponse> getStationList();
-
-    @GET("/station/list/category/{category}")
-    public Observable<StationResponse> getStationList(@Path("category")String category);
-
     @GET("/nowplaying")
-    public Observable<NowPlayingResponse> getNowPlaying();
+    public Observable<MapResponse<String, NowPlayingMeta>> getNowPlaying();
 
     @GET("/nowplaying/index/id/{id}")
-    public Observable<NowPlayingStationResponse> getNowPlayingForStation(@Path("id")int id);
+    public Observable<ObjectResponse<NowPlayingMeta>> getNowPlayingForStation(@Path("id")int id);
+
+    @GET("/station/list")
+    public Observable<ArrayResponse<Station>> getStationList();
+
+    @GET("/station/list/category/{category}")
+    public Observable<ArrayResponse<Station>> getStationList(@Path("category")String category);
 
     @GET("/show/latest")
-    public Observable<ShowResponse> getShows();
+    public Observable<ArrayResponse<Show>> getShows();
 
     @GET("/show/index")
-    public Observable<ShowResponse> getAllShows();
+    public Observable<ArrayResponse<Show>> getAllShows();
 
     @GET("/show/index/id/{id}")
-    public Observable<ShowResponse> getEpisodesForShow(@Path("id")String id);
+    public Observable<ObjectResponse<Show>> getEpisodesForShow(@Path("id")String id);
 
     /**
      * <p>A builder class for {@link com.ponyvillelive.app.net.API}. A default builder will use

@@ -1,14 +1,22 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
               tools:context="com.ponyvillelive.app.ui.BottomDrawerFragment" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/mythozoology"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_drawer_peek_height"
         android:orientation="horizontal"
-        android:background="@drawable/bottom_drawer_peek_background">
+        android:background="#efff"
+        android:layout_gravity="top">
         <ImageView
             android:id="@+id/icon"
             android:layout_width="@dimen/bottom_drawer_peek_height"
@@ -50,10 +58,12 @@
             android:scaleType="centerInside"/>
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/bottom_drawer_list"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        tools:listitem="@layout/view_track_list_item"/>
-</LinearLayout>
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:background="#efff">
+
+        </LinearLayout>
+</FrameLayout>

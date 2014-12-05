@@ -7,7 +7,7 @@ import java.util.Map;
  */
 public class DebugData {
 
-    public Map<String, StationResponse> stations;
-    public NowPlayingResponse nowPlaying;
+    public Map<String, ArrayResponse<Station>> stations;
+    public MapResponse<String, NowPlayingMeta> nowPlaying;
 
 }

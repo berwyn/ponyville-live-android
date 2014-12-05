@@ -3,8 +3,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.+'
-        classpath 'me.tatarka:gradle-retrolambda:2.0.+'
+        classpath 'com.android.tools.build:gradle:1.0.0-rc4'
+        classpath 'me.tatarka:gradle-retrolambda:2.4.1'
     }
 }
 
@@ -22,34 +22,52 @@ def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
 
+def isTravis = "true".equals(System.getenv("TRAVIS"))
+def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
+
+def packageName = 'com.ponyvillelive.app'
+
 android {
-    compileSdkVersion 20
-    buildToolsVersion '20.0.0'
+    compileSdkVersion 21
+    buildToolsVersion '21.1.1'
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 20
+        applicationId packageName
+        minSdkVersion 15
+        targetSdkVersion 21
 
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
+        buildConfigField "String", "PACKAGE_NAME", "\"${packageName}\""
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            applicationIdSuffix '.dev'
+            versionNameSuffix '-dev'
+        }
     }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildTypes {
-        release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-        }
-        debug {
-            applicationIdSuffix '.debug'
-            versionNameSuffix '-DEBUG'
-        }
+
+    dexOptions {
+        // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
+        preDexLibraries = preDexEnabled && !isTravis
     }
 }
 
@@ -59,24 +77,29 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    provided 'com.squareup.dagger:dagger-compiler:1.2.2'
 
-    provided 'com.squareup.dagger:dagger-compiler:1.2.+'
-    provided 'com.github.frankiesardo:icepick-processor:2.3.+'
+    compile 'com.jakewharton.timber:timber:2.5.0'
+    compile 'com.jakewharton:butterknife:6.0.0'
+    compile 'com.google.code.gson:gson:2.3.1'
 
-    compile 'com.github.frankiesardo:icepick:2.3.+'
-    compile 'com.jakewharton.timber:timber:2.2.+'
-    compile 'com.jakewharton:butterknife:5.1.+'
-    compile 'com.google.code.gson:gson:2.3'
-    compile 'com.squareup.okhttp:okhttp:2.0.+'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.+'
-    compile 'com.squareup.retrofit:retrofit:1.6.+'
-    compile 'com.squareup.picasso:picasso:2.3.+'
-    compile 'com.squareup.dagger:dagger:1.2.+'
-    compile 'com.netflix.rxjava:rxjava-android:0.19.+'
-    compile 'com.astuetz:pagerslidingtabstrip:1.0.+'
-    compile 'com.sothree.slidinguppanel:library:2.0.+'
+    compile 'com.squareup.okhttp:okhttp:2.1.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.1.0'
+    compile 'com.squareup.retrofit:retrofit:1.8.0'
+    compile 'com.squareup.picasso:picasso:2.4.0'
+    compile 'com.squareup.dagger:dagger:1.2.2'
 
-    debugCompile 'com.jakewharton.madge:madge:1.1.+'
-    debugCompile 'com.jakewharton.scalpel:scalpel:1.1.+'
-    debugCompile 'com.squareup.retrofit:retrofit-mock:1.6.+'
+    compile 'io.reactivex:rxjava:1.0.2'
+    compile 'io.reactivex:rxandroid:0.23.0'
+    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
+    compile 'com.sothree.slidinguppanel:library:2.0.3'
+
+    compile 'com.android.support:mediarouter-v7:21.0.2'
+    compile 'com.android.support:support-v4:21.0.2'
+    compile 'com.android.support:appcompat-v7:21.0.2'
+    compile 'com.android.support:palette-v7:21.0.2'
+
+    debugCompile 'com.jakewharton.madge:madge:1.1.1'
+    debugCompile 'com.jakewharton.scalpel:scalpel:1.1.2'
+    debugCompile 'com.squareup.retrofit:retrofit-mock:1.8.0'
 }

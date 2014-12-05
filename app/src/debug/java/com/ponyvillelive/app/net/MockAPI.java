@@ -5,11 +5,13 @@ import android.app.Application;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ponyvillelive.app.R;
+import com.ponyvillelive.app.model.ArrayResponse;
 import com.ponyvillelive.app.model.DebugData;
-import com.ponyvillelive.app.model.NowPlayingResponse;
-import com.ponyvillelive.app.model.NowPlayingStationResponse;
-import com.ponyvillelive.app.model.ShowResponse;
-import com.ponyvillelive.app.model.StationResponse;
+import com.ponyvillelive.app.model.MapResponse;
+import com.ponyvillelive.app.model.NowPlayingMeta;
+import com.ponyvillelive.app.model.ObjectResponse;
+import com.ponyvillelive.app.model.Show;
+import com.ponyvillelive.app.model.Station;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -37,37 +39,37 @@ public class MockAPI implements API {
     }
 
     @Override
-    public Observable<StationResponse> getStationList() {
-        return Observable.from(data.stations.get("all"));
+    public Observable<ArrayResponse<Station>> getStationList() {
+        return Observable.just(data.stations.get("all"));
     }
 
     @Override
-    public Observable<StationResponse> getStationList(@Path("category") String category) {
-        return Observable.from(data.stations.get(category));
+    public Observable<ArrayResponse<Station>> getStationList(@Path("category") String category) {
+        return Observable.just(data.stations.get(category));
     }
 
     @Override
-    public Observable<NowPlayingResponse> getNowPlaying() {
-        return Observable.from(data.nowPlaying);
+    public Observable<MapResponse<String, NowPlayingMeta>> getNowPlaying() {
+        return Observable.just(data.nowPlaying);
     }
 
     @Override
-    public Observable<NowPlayingStationResponse> getNowPlayingForStation(@Path("id") int id) {
+    public Observable<ObjectResponse<NowPlayingMeta>> getNowPlayingForStation(@Path("id") int id) {
         return null;
     }
 
     @Override
-    public Observable<ShowResponse> getShows() {
+    public Observable<ArrayResponse<Show>> getShows() {
         return null;
     }
 
     @Override
-    public Observable<ShowResponse> getAllShows() {
+    public Observable<ArrayResponse<Show>> getAllShows() {
         return null;
     }
 
     @Override
-    public Observable<ShowResponse> getEpisodesForShow(@Path("id") String id) {
+    public Observable<ObjectResponse<Show>> getEpisodesForShow(@Path("id") String id) {
         return null;
     }
 }

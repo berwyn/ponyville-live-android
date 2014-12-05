@@ -2,10 +2,16 @@ package com.ponyvillelive.app.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.MediaRouteActionProvider;
+import android.support.v7.media.MediaControlIntent;
+import android.support.v7.media.MediaRouteSelector;
+import android.support.v7.media.MediaRouter;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,10 +29,9 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import icepick.Icepick;
 import timber.log.Timber;
 
-public class MainActivity extends FragmentActivity implements
+public class MainActivity extends ActionBarActivity implements
         StationFragment.StationFragmentListener,
         BottomDrawerFragment.DrawerListener {
 
@@ -44,14 +49,18 @@ public class MainActivity extends FragmentActivity implements
     @InjectView(R.id.drawer_metadata)
     View drawerHandle;
 
+    Toolbar toolbar;
+
     private boolean tester = false;
     private Station station;
     private BottomDrawerFragment bottomDrawer;
+    private MediaRouteSelector routeSelector;
+    private MediaRouter mediaRouter;
+    private MediaRouter.Callback mediaRouterCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Icepick.restoreInstanceState(this, savedInstanceState);
 
         PvlApp app = PvlApp.get(this);
         app.inject(this);
@@ -60,6 +69,9 @@ public class MainActivity extends FragmentActivity implements
 
         ViewGroup container = appContainer.get(this, app);
         View view = getLayoutInflater().inflate(R.layout.activity_main, container);
+
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         ButterKnife.inject(this, view);
 
@@ -73,6 +85,15 @@ public class MainActivity extends FragmentActivity implements
         slideUpPanel.hidePanel();
         slideUpPanel.setPanelSlideListener(new ActionbarHideSlidePanelListener(this));
 
+        routeSelector = new MediaRouteSelector.Builder()
+                .addControlCategory(MediaControlIntent.CATEGORY_LIVE_AUDIO)
+                .addControlCategory(MediaControlIntent.CATEGORY_LIVE_VIDEO)
+                .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
+                .build();
+        mediaRouter = MediaRouter.getInstance(this);
+        mediaRouterCallback = new MediaRouter.Callback() {
+        };
+
         if(savedInstanceState != null && savedInstanceState.containsKey(BUNDLE_KEY_STATION)) {
             station = savedInstanceState.getParcelable(BUNDLE_KEY_STATION);
             handleStationSelected(station);
@@ -82,18 +103,37 @@ public class MainActivity extends FragmentActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        MenuItem mediaRouteMenuItem = menu.findItem(R.id.action_cast);
+        MediaRouteActionProvider mediaRouteActionProvider =
+                (MediaRouteActionProvider) MenuItemCompat.getActionProvider(mediaRouteMenuItem);
+        mediaRouteActionProvider.setRouteSelector(routeSelector);
+
+        // Show the menu
         return true;
+    }
+
+    @Override
+    protected void onStart() {
+        mediaRouter.addCallback(routeSelector, mediaRouterCallback, MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY);
+        super.onStart();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Icepick.saveInstanceState(this, outState);
         if(station != null) {
             outState.putParcelable(BUNDLE_KEY_STATION, station);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        mediaRouter.removeCallback(mediaRouterCallback);
+        super.onStop();
     }
 
     @Override

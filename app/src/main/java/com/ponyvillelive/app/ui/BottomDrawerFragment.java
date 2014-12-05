@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -39,8 +40,8 @@ public class BottomDrawerFragment extends Fragment {
     TextView  title;
     @InjectView(R.id.text_artist)
     TextView  artist;
-    @InjectView(R.id.bottom_drawer_list)
-    ListView trackList;
+//    @InjectView(R.id.bottom_drawer_list)
+//    ListView  trackList;
 
     @Inject
     Picasso picasso;
@@ -48,7 +49,8 @@ public class BottomDrawerFragment extends Fragment {
     API     api;
 
     private TrackListAdapter adapter;
-    private DrawerListener listener;
+    private DrawerListener   listener;
+    private Subscription     songSubscription;
 
     /**
      * Use this factory method to create a new instance of
@@ -80,7 +82,7 @@ public class BottomDrawerFragment extends Fragment {
         ButterKnife.inject(this, v);
 
         adapter = new TrackListAdapter();
-        trackList.setAdapter(adapter);
+//        trackList.setAdapter(adapter);
 
         return v;
     }
@@ -114,7 +116,7 @@ public class BottomDrawerFragment extends Fragment {
      * @param station The {@link com.ponyvillelive.app.model.Station} to bind to
      */
     public void showStationInfo(Station station) {
-        api
+        songSubscription = api
                 .getNowPlayingForStation(station.id)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -132,6 +134,7 @@ public class BottomDrawerFragment extends Fragment {
                             .load("http:" + data.station.imageUrl)
                             .into(icon);
                     adapter.setSongs(data.songHistory);
+                    songSubscription.unsubscribe();
                 });
     }
 
