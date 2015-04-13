@@ -2,4 +2,6 @@
     <color name="colorPrimary">#1579D5</color>
     <color name="colorPrimaryDark">#105CA2</color>
     <color name="colorAccent">#ff4081</color>
+    <color name="drawer_item_selected_background">#feee</color>
+    <color name="drawer_item_tint_color">#ff333333</color>
 </resources>

@@ -7,6 +7,16 @@
          https://developer.android.com/design/patterns/navigation-drawer.html -->
     <dimen name="navigation_drawer_width">240dp</dimen>
 
-    <dimen name="bottom_drawer_peek_height">64dp</dimen>
+    <dimen name="bottom_drawer_peek_height">88dp</dimen>
     <dimen name="icon_size">64dp</dimen>
+    <dimen name="drawer_item_height">48dp</dimen>
+    <dimen name="drawer_item_horizontal_padding">16dp</dimen>
+    <dimen name="drawer_item_icon_margin_end">32dp</dimen>
+
+    <!-- playback controls
+         Taken from the Android Open Source Project's reference application,
+         which is under the Apache license -->
+    <dimen name="playback_controls_albumart_horizontal_margin">8dp</dimen>
+    <dimen name="playback_controls_albumart_size">64dp</dimen>
+    <dimen name="playback_controls_padding">8dp</dimen>
 </resources>

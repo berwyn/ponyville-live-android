@@ -17,9 +17,20 @@
     <string name="action_cancel">Cancel</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="accessibility_station_icon">Station icon</string>
-    <string name="action_cast">Cast</string>
+    <string name="action_cast">Play on...</string>
     <string name="text_action_change_stream">Change stream</string>
     <string name="content_description_station_logo">Station logo</string>
+    <string name="loading">Loading...</string>
+
+    <string name="casting_to_device">Casting to %1$s</string>
+    <string name="currently_playing_song">Song currently playing</string>
+    <string name="currently_playing_artist">Artist of currently playing song</string>
+    <string name="currently_playing_extra_info">Extra info for currently playing song</string>
+    <string name="play_pause">play or pause</string>
+
+    <string name="background_img_desc">Album art</string>
+    <string name="vote_down">I don\'t like this song</string>
+    <string name="vote_up">I like this song</string>
 
     <string-array name="navItems">
         <item>Radio</item>

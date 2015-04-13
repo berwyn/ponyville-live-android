@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0F0F0"
-    tools:context="com.ponyvillelive.app.ui.StationFragment">
+    tools:context="com.ponyvillelive.pvlmobile.ui.StationFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@android:id/list"

@@ -2,22 +2,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.ponyvillelive.app.ui.MainActivity" >
+    tools:context="com.ponyvillelive.pvlmobile.ui.MainActivity">
 
-    <item android:id="@+id/action_cast"
+    <item
+        android:id="@+id/action_cast"
         android:title="@string/action_cast"
         app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
-        app:showAsAction="always" />
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/action_settings"
-        android:title="@string/action_settings"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        android:title="@string/action_settings"
+        app:showAsAction="never"/>
     <item
         android:id="@+id/action_tester"
         android:checkable="true"
-        android:title="FUCKIN YEAH"
         android:orderInCategory="99"
-        app:showAsAction="never" />
+        android:title="FUCKIN YEAH"
+        app:showAsAction="never"/>
 </menu>
