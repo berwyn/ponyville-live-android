@@ -8,8 +8,8 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.MediaRouteButton;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -32,7 +32,7 @@ import timber.log.Timber;
 /**
  * Created by berwyn on 14/03/15.
  */
-public abstract class ActionBarCastActivity extends ActionBarActivity {
+public abstract class ActionBarCastActivity extends AppCompatActivity {
 
     public static final int DELAY_MILLIS = 1000;
 
@@ -104,7 +104,7 @@ public abstract class ActionBarCastActivity extends ActionBarActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (toolbarInitialised) {
+        if (!toolbarInitialised) {
             throw new IllegalStateException(
                     "You must run super#initializeToolbar in your onCreate method");
         }
@@ -188,12 +188,12 @@ public abstract class ActionBarCastActivity extends ActionBarActivity {
         toolbar.setTitle(titleId);
     }
 
-    public void setMediaControllerCompat(MediaControllerCompat mediaController) {
-        this.mediaController = mediaController;
-    }
-
     public MediaControllerCompat getMediaControllerCompat() {
         return mediaController;
+    }
+
+    public void setMediaControllerCompat(MediaControllerCompat mediaController) {
+        this.mediaController = mediaController;
     }
 
     protected void initializeToolbar() {

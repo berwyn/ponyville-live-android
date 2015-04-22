@@ -73,7 +73,7 @@ public class ScrimInsetsRelativeLayout extends RelativeLayout {
 
         int width = getWidth();
         int height = getHeight();
-        if(insets == null && insetForeground != null) {
+        if(insets != null && insetForeground != null) {
             int sc = canvas.save();
             canvas.translate(getScrollX(), getScrollY());
 

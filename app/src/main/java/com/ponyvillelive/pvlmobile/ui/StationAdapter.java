@@ -56,7 +56,7 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHold
         PvlApp.get(inflater.getContext()).inject(this);
         apiSub = api
                 .getStationList(type)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stationResponse -> {
                     this.stations = stationResponse.result;
@@ -134,18 +134,11 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHold
 
         @Override
         public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-            if (colourPalette == null) {
-                Palette.generateAsync(bitmap, 8, (palette) -> baseView.post(() -> {
-                    icon.setImageBitmap(bitmap);
-                    colourPalette = palette;
-                    colourise();
-                }));
-            } else {
-                baseView.post(() -> {
-                    icon.setImageBitmap(bitmap);
-                    colourise();
-                });
-            }
+            colourPalette = Palette.from(bitmap).generate();
+            baseView.post(() -> {
+                icon.setImageBitmap(bitmap);
+                colourise();
+            });
         }
 
         public void colourise() {

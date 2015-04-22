@@ -10,19 +10,19 @@
     </declare-styleable>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <!--<item name="android:actionBarStyle">@style/AppTheme.ActionBar</item>-->
-        <!--<item name="android:actionOverflowButtonStyle">@style/AppTheme.ButtonOverflow</item>-->
-        <!--<item name="android:windowContentOverlay">@null</item>-->
-        <!--<item name="android:windowActionBarOverlay">true</item>-->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowContentTransitions">true</item>
+
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
         <!-- Remove the system action bar here -->
         <item name="android:windowActionBar">false</item>
-        <item name="windowActionBar">false</item>
     </style>
 
     <style name="AppTheme.StationIcon">

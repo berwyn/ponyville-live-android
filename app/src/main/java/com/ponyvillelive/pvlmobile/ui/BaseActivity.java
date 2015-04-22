@@ -50,9 +50,7 @@ public abstract class BaseActivity extends ActionBarCastActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Timber.d(TAG, "Activity onCreate");
-
     }
 
     @Override

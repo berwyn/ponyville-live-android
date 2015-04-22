@@ -15,7 +15,8 @@
         android:id="@+id/drawer_header"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@color/colorAccent"/>
+        android:src="@drawable/drawer_header_light"
+        android:scaleType="centerCrop"/>
 
     <ListView
         android:id="@+id/drawer_list"
