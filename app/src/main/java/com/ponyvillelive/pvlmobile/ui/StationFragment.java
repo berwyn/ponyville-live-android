@@ -140,7 +140,7 @@ public class StationFragment extends Fragment {
         private final GestureDetectorCompat gestureDetector;
 
         StationListTouchListener() {
-            gestureDetector = new StationListGestureDetector(listView.getContext(), new StationListGestureListener());
+            gestureDetector = new GestureDetectorCompat(listView.getContext(), new StationListGestureListener());
         }
 
         private boolean isAttachedToWindow(RecyclerView hostView) {
@@ -168,26 +168,10 @@ public class StationFragment extends Fragment {
             // This is a noop, since our gesture detector actually handles
             // the event. We just use this class to snoop :)
         }
-    }
-
-    private final class StationListGestureDetector extends GestureDetectorCompat {
-        private final StationListGestureListener gestureListener;
-
-        public StationListGestureDetector(Context context, StationListGestureListener listener) {
-            super(context, listener);
-            this.gestureListener = listener;
-        }
 
         @Override
-        public boolean onTouchEvent(MotionEvent event) {
-            final boolean handled = super.onTouchEvent(event);
-
-            final int action = event.getAction() & MotionEventCompat.ACTION_MASK;
-            if(action == MotionEvent.ACTION_UP) {
-                gestureListener.handleTap(event);
-            }
-
-            return handled;
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+            // Also a noop
         }
     }
 
