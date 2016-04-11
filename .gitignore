@@ -7,3 +7,6 @@
 .idea/
 
 build/
+
+# GMS
+google-services.json

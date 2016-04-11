@@ -2,6 +2,19 @@
 
 allprojects {
     repositories {
+        jcenter()
         mavenCentral()
     }
+    buildscript {
+        repositories {
+            jcenter()
+            mavenCentral()
+        }
+        dependencies {
+            classpath 'com.android.tools.build:gradle:2.1.0-alpha5'
+            classpath 'com.google.gms:google-services:2.1.0-alpha5'
+            classpath 'me.tatarka:gradle-retrolambda:3.3.0-beta4'
+        }
+    }
 }
+

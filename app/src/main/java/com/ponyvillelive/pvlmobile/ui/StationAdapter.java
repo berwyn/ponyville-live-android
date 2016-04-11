@@ -103,6 +103,10 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHold
         TextView    name;
         @InjectView(R.id.station_genre)
         TextView    genre;
+        @InjectView(R.id.station_title)
+        TextView    title;
+        @InjectView(R.id.station_artist)
+        TextView    artist;
         @InjectView(R.id.station_menu)
         ImageButton menuButton;
 

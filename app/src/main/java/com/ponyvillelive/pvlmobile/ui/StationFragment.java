@@ -88,7 +88,6 @@ public class StationFragment extends Fragment {
         listView.setAdapter(adapter);
         listView.setLayoutManager(layoutManager);
         listView.setHasFixedSize(true);
-
         listView.addOnItemTouchListener(new StationListTouchListener());
 
 //        final ItemClickSupport itemClickSupport = ItemClickSupport.addTo(listView);

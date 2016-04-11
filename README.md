@@ -15,6 +15,9 @@ retrolambda {
 }
 ```
 
+Next, obtain the google-services.json files you need from another project member, and place them in
+`app/src/main` and `app/src/debug`. These are needed to compile GMS into the app.
+
 Then you can use the provided gradle wrapper to compile and install the application on your device
 
 ```bash
@@ -29,9 +32,16 @@ or for Windows users,
 
 ### License
 
-Unless otherwise noted, all source code files and layout assets are to be considered licensed under
-the Apache v2 license. Branding, marketing assets, the name "Ponyville Live!" and other related media
-are the property of Ponyville Live! and may be used under the terms of their branding agreement. This
-application and compiled binaries derived from this unmodified source code are copyrighted material
-© 2014 berwyn. Permission is hereby granted to utilise for personal use any binaries built from this
-source code, however no rights are granted to redistribute generated binaries without written consent.
+Copyright 2014, 2015, 2016 berwyn
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
